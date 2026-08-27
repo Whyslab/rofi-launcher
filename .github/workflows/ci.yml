@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python:
+    name: Lint and tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ruff pytest
+      - run: ruff check .
+      - run: pytest tests/ -q
+
+  shell:
+    name: Shell scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax check
+        run: find . -name '*.sh' -print0 | xargs -0 -n1 sh -n
+      - uses: ludeeus/action-shellcheck@master
+        with:
+          severity: warning
+
+  protocol:
+    name: rofi script protocol
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # rofi parses the script's stdout positionally: one row per line, fields
+      # separated by control bytes. A first call must produce the directives
+      # rofi needs, or the launcher opens empty with no error anywhere.
+      - name: A first call emits a usable menu
+        run: |
+          set -euo pipefail
+          out=$(ROFI_RETV=0 XDG_CONFIG_HOME=$(mktemp -d) python3 rofi_launcher/launcher.py)
+          printf '%s' "$out" | grep -q 'use-hot-keys' || { echo "::error::no use-hot-keys directive"; exit 1; }
+          printf '%s' "$out" | grep -q 'markup-rows'  || { echo "::error::no markup-rows directive"; exit 1; }
+          printf '%s' "$out" | grep -q 'All applications' || { echo "::error::default folders missing"; exit 1; }
+
+      # The example config in the repository and the default compiled into the
+      # script are the same text; if one is edited alone they drift apart.
+      - name: The shipped example matches the built-in default
+        run: |
+          python3 - <<'PY'
+          import re, sys
+          src = open('rofi_launcher/launcher.py', encoding='utf-8').read()
+          builtin = re.search(r'DEFAULT_FOLDERS = """\\\n(.*?)"""', src, re.S).group(1)
+          shipped = open('config/folders.example.conf', encoding='utf-8').read()
+          if builtin != shipped:
+              print("::error::config/folders.example.conf has drifted from DEFAULT_FOLDERS")
+              sys.exit(1)
+          PY
+
+  install:
+    name: Sandbox install and uninstall
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install into a sandbox, then remove it
+        run: |
+          set -euo pipefail
+          SB=$(mktemp -d)
+          ./install.sh --prefix "$SB"
+          for f in .local/share/rofi-launcher/launcher.py \
+                   .local/share/rofi-launcher/launch.sh \
+                   .local/share/rofi-launcher/monochrome.rasi \
+                   .config/rofi-launcher/folders.conf; do
+            test -e "$SB$HOME/$f" || { echo "::error::missing $f"; exit 1; }
+          done
+          ./uninstall.sh --prefix "$SB" --purge
+          left=$(find "$SB" -type f | wc -l)
+          [ "$left" -eq 0 ] || { echo "::error::$left files left behind"; exit 1; }
+
+  privacy:
+    name: Nothing personal shipped
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: No personal identifiers, no hard-coded home paths
+        run: |
+          set -euo pipefail
+          status=0
+          if grep -rniE 'bogdan|dodg1403' . --exclude-dir=.git --exclude='ci.yml'; then
+            echo "::error::personal identifier found"; status=1
+          fi
+          if grep -rnE '/home/[a-z][a-z0-9_-]*/' . --exclude-dir=.git --exclude='*.md' --exclude='ci.yml'; then
+            echo "::error::hard-coded home path found"; status=1
+          fi
+          exit "$status"

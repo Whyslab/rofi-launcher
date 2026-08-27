@@ -1,0 +1,9 @@
+# Pinned applications. One line = one .desktop entry.
+# The order of the lines is the order on the root screen.
+# Rewritten on Ctrl+P / Ctrl+Alt+↑↓ — comments below this point are not kept.
+#
+# These are examples. Pin what you actually use with Ctrl+P inside a folder
+# rather than editing this file by hand.
+firefox.desktop
+thunar.desktop
+code.desktop

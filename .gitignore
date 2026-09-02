@@ -3,3 +3,6 @@ __pycache__/
 .ruff_cache/
 .pytest_cache/
 *.swp
+
+# graphify knowledge graph (regenerate with: graphify update .)
+graphify-out/

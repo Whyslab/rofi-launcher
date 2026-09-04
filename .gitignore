@@ -6,3 +6,7 @@ __pycache__/
 
 # graphify knowledge graph (regenerate with: graphify update .)
 graphify-out/
+
+# OMC hook state. The global ignore only covers a top-level .omc/;
+# the hooks write one wherever the shell's cwd happens to be.
+.omc/

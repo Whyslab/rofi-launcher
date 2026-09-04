@@ -19,11 +19,16 @@
 APP="$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)"
 HUB="$APP/rofi_hub/hub.py"
 
+# Своя тема, а не ~/.config/rofi/config.rasi: там список обрезан десятью
+# строками, и разделы хаба уезжали за нижний край экрана. Пустое значение
+# ROFI_LAUNCHER_THEME означает "взять мой собственный конфиг rofi".
+THEME="${ROFI_LAUNCHER_THEME-$APP/themes/hub.rasi}"
+
 ROFI_DATA="${1:-}"
 export ROFI_DATA
 
 exec rofi -show hub -modes "hub:$HUB" \
-  -theme "$APP/themes/hub.rasi" \
+  ${THEME:+-theme "$THEME"} \
   -kb-row-up   "Up" \
   -kb-custom-1 "Control+p,Control+Cyrillic_ze" \
   -kb-custom-3 "Control+Alt+Up" \

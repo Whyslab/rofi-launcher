@@ -1,118 +1,115 @@
-/* hub.rasi — тема единого хаба.
+/* hub.rasi -- the theme for the hub's list.
  *
- * Отдельный файл, а не ~/.config/rofi/config.rasi: там lines: 10, и при
- * восьми закреплённых приложениях разделы хаба уезжали за нижний край —
- * их не было видно вообще, хотя ради них всё и затевалось.
+ * Same palette as monochrome.rasi, which it is derived from; what differs is
+ * how much fits on screen. The root shows pinned entries, folders AND the
+ * hub's sections, so at twelve rows with generous padding the sections fell
+ * off the bottom of a 1080p screen -- invisible, which defeats the point of
+ * putting them there. Thirteen slightly tighter rows fit, and the window is
+ * still `fixed-height: false`, so a short list does not pad itself out.
  *
- * 16 строк: восемь пинов, два разделителя, папки и семь разделов помещаются
- * без прокрутки. fixed-height: false оставлен — окно всё так же сжимается
- * под фактическое число строк, так что на коротком списке оно не раздувается.
+ * The animations grid has its own theme (grid.rasi): it needs large
+ * thumbnails, and rofi cannot restyle itself mid-session.
  */
 
-@theme "/dev/null"
-
 * {
-    bg: #0a0a0a;           /* Глубокий черный фон */
-    bg-element: #161616;   /* Темно-серый фон поиска */
-    fg: #ffffff;           /* Белый текст */
-    fg-alt: #666666;       /* Серый текст плейсхолдера */
-    accent: #ffffff;       /* Белый акцент */
-    accent-text: #000000;  /* Черный текст на акценте */
+    bg-base:      #0a0a0a;   /* Deep black window background */
+    bg-elevated:  #161616;   /* Dark grey -- search bar / message surface */
+    bg-selected:  #ffffff;   /* Selected row: solid white, not a soft tint */
+    fg-primary:   #ffffff;   /* White body text */
+    fg-secondary: #666666;   /* Grey -- placeholder / prompt label */
+    accent-text:  #000000;   /* Black text on the white selected row */
+    border-color: #222222;   /* Window border */
 
     background-color: transparent;
-    text-color: @fg;
-    margin: 0;
-    padding: 0;
+    text-color:        @fg-primary;
+    font:              "JetBrainsMono Nerd Font 11";
 }
 
 window {
-    width: 500px;
-    background-color: @bg;
-    border: 1px solid;
-    border-color: #222222;
-    border-radius: 16px;
-    padding: 20px;
+    transparency:     "real";
+    background-color: @bg-base;
+    border:            1px;
+    border-color:       @border-color;
+    border-radius:      16px;
+    padding:            20px;
+    width:              620px;
+    location:           center;
+    anchor:              center;
 }
 
 mainbox {
+    background-color: transparent;
     spacing: 15px;
+    children: [ inputbar, message, listview ];
 }
 
 inputbar {
-    background-color: @bg-element;
-    border-radius: 12px;
-    padding: 12px 16px;
-    spacing: 12px;
+    background-color: @bg-elevated;
+    border-radius:     12px;
+    padding:            12px 16px;
+    spacing:            12px;
     children: [ prompt, entry ];
 }
 
 prompt {
-    text-color: @fg-alt;
-    vertical-align: 0.5;
+    background-color: transparent;
+    text-color:         @fg-secondary;
+    vertical-align:     0.5;
 }
 
 entry {
-    placeholder: "Поиск...";
-    placeholder-color: @fg-alt;
-    text-color: @fg;
-    vertical-align: 0.5;
-}
-
-listview {
-    lines: 13;
-    fixed-height: false;  /* окно сжимается под число строк, а не держит 10 всегда */
-    spacing: 3px;
-    scrollbar: false;
-    border: 0;
-}
-
-element {
-    padding: 7px 14px;
-    border-radius: 10px;
-    spacing: 12px;
-}
-
-element normal.normal, element alternate.normal {
     background-color: transparent;
-    text-color: @fg;
+    text-color:         @fg-primary;
+    /* No placeholder text on purpose: it lives in the theme, which cannot
+       be localised, and an English hint under a translated prompt and hint
+       line reads as a bug. The magnifier in the prompt says enough. */
+    placeholder-color:  @fg-secondary;
+    vertical-align:     0.5;
 }
-
-element selected.normal {
-    background-color: @accent;
-    text-color: @accent-text;
-}
-
-element-icon {
-    size: 22px;
-    background-color: transparent;
-}
-
-element-text {
-    vertical-align: 0.5;
-    background-color: transparent;
-    text-color: inherit;
-}
-
-/* ── Строка подсказки лаунчера (rofi-launcher) ────────────────────── */
-/* Из-за @theme "/dev/null" эти виджеты иначе рисуются вообще без стиля. */
 
 message {
-    background-color: @bg-element;
-    border-radius: 12px;
-    padding: 8px 12px;
+    background-color: @bg-elevated;
+    border-radius:     12px;
+    padding:            10px 14px;
+    text-color:         @fg-primary;
 }
 
 textbox {
     background-color: transparent;
-    text-color: @fg-alt;
-    vertical-align: 0.5;
 }
 
-/* Сообщения об ошибках (rofi -e и собственные ошибки разбора темы) */
-error-message {
-    background-color: @bg;
-    border: 1px solid;
-    border-color: #222222;
-    border-radius: 16px;
-    padding: 20px;
+listview {
+    background-color: transparent;
+    spacing:            3px;
+    lines:              13;
+    cycle:              true;
+    dynamic:             true;
+    scrollbar:           false;
+    fixed-height:        false;
+    border:              0;
+}
+
+element {
+    background-color: transparent;
+    text-color:         @fg-primary;
+    border-radius:      10px;
+    padding:              7px 14px;
+    spacing:             12px;
+    orientation:         horizontal;
+}
+
+element normal.normal, element alternate.normal {
+    background-color: transparent;
+    text-color:         @fg-primary;
+}
+
+element selected.normal {
+    background-color: @bg-selected;
+    text-color:         @accent-text;
+}
+
+element-text {
+    vertical-align:    0.5;
+    text-color:         inherit;
+    background-color:  transparent;
 }

@@ -10,6 +10,10 @@
 
 APP="$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)"
 
+# Сетке нужна своя тема с крупными превью. Переопределяется отдельно от
+# темы списка: они решают разные задачи и одной строкой не заменяются.
+THEME="${ROFI_LAUNCHER_GRID_THEME-$APP/themes/grid.rasi}"
+
 exec rofi -show anim -modes "anim:$APP/rofi_hub/anim_mode.py" \
-  -theme "$APP/themes/grid.rasi" \
+  ${THEME:+-theme "$THEME"} \
   -kb-custom-1 "Control+Alt+space"

@@ -20,6 +20,24 @@ everything else is one keypress away inside a folder.
 when you know what you are looking for and awkward when you do not. This keeps
 the six things you actually launch at the top and files the rest away.
 
+## Sections
+
+The root is your pinned entries, your folders, and the list of sections. Typing
+filters both at once: "wall" finds the Wallpaper section, "fir" finds Firefox.
+
+| Section | What it does | Backed by |
+|---|---|---|
+| **Clipboard** | history; `Enter` copies, `Ctrl+X` deletes an entry | `cliphist` |
+| **Wallpaper** | a grid of thumbnails | own script, separate window |
+| **Animations** | animation presets with previews and a live demo | `hyprctl`, `hypr-dissolve` |
+| **Windows** | open windows, focus and close | `hyprctl` |
+| **Emoji** | 556 symbols, `Enter` copies | own database |
+| **Screenshot** | a region or the whole screen | external script |
+| **Power** | lock, suspend, hibernate, log out, reboot, shut down | `systemctl`, wlogout's layout |
+
+The irreversible power entries ask for confirmation, and "No" is the first row —
+a reflex `Enter` cancels rather than shutting the machine down.
+
 ## What's in it
 
 - **Pinned entries in your order.** `Ctrl+P` pins the highlighted app,
@@ -46,6 +64,9 @@ the six things you actually launch at the top and files the rest away.
 
 - `rofi` 1.7+ (script mode with `use-hot-keys`)
 - Python 3.9+
+- Per section, each optional — without it the section says what is missing:
+  `cliphist` and `wl-clipboard` (clipboard, emoji), `hyprctl` (windows,
+  animations), `python-pillow` (drawing the animation previews)
 - A Nerd Font for the folder glyph and the pin star — the bundled theme asks for
   JetBrainsMono Nerd Font
 - Optional: `glib2` (`gio`), strongly recommended; without it entries are
@@ -64,14 +85,14 @@ cd rofi-launcher
 Then bind it. Hyprland:
 
 ```bash
-$menu = ~/.local/share/rofi-launcher/launch.sh
+$menu = ~/.local/share/rofi-launcher/bin/hub.sh
 bind = SUPER, R, exec, $menu
 ```
 
 Sway or i3:
 
 ```
-bindsym $mod+r exec ~/.local/share/rofi-launcher/launch.sh
+bindsym $mod+r exec ~/.local/share/rofi-launcher/bin/hub.sh
 ```
 
 `./install.sh --dry-run` shows what it would do; `./install.sh --prefix /tmp/t`
@@ -88,7 +109,35 @@ installs into a throwaway directory.
 | `Alt+←` | back to the root screen |
 | `Ctrl+P` | pin the highlighted app, or unpin it if pinned |
 | `Ctrl+Alt+↑↓` | move a pinned entry up or down |
+| `Enter` on a section | enter it — the window stays open |
+| `Ctrl+X` | delete a clipboard entry, close a window |
 | `Esc` | close |
+
+The animations grid has its own pair: `Enter` applies a preset for good,
+`Ctrl+Alt+Space` shows it live. Not `Ctrl+Space` — rofi already uses that for
+`kb-row-select`, and trying to rebind it makes rofi show an error dialog
+instead of the menu.
+
+### Animations
+
+A preset is one JSON file in `data/presets/` describing the whole feel at once:
+window, workspace and layer animations, its own bezier curves, and the
+`hypr-dissolve` plugin's parameters. Half a preset is not a look.
+
+Applying and previewing are different things:
+
+| | Live preview | Apply |
+|---|---|---|
+| Mechanism | `hyprctl keyword` | generated config + `hyprctl reload` |
+| Writes files | no | yes |
+| Undo | `hyprctl reload` | pick another preset |
+
+So previewing cannot damage a configuration: it writes nothing, and `reload` is
+a real undo button.
+
+**Both** Hyprland config formats are generated, classic and Lua. The moment a
+`hyprland.lua` exists the compositor stops reading `.conf` entirely — and a
+`dofile` pointing at a file that is not there drops it to emergency keybinds.
 
 ### Defining folders
 
@@ -149,8 +198,8 @@ different lengths the feature disables itself rather than mistranslating.
 | Variable | Default | Purpose |
 |---|---|---|
 | `ROFI_LAUNCHER_TERMINAL` | `kitty` | terminal for `Terminal=true` entries |
-| `ROFI_LAUNCHER_THEME` | the bundled `monochrome.rasi` | `.rasi` file; empty means your own rofi config |
-| `ROFI_LAUNCHER_SCRIPT` | next to `launch.sh` | where `launcher.py` lives |
+| `ROFI_LAUNCHER_THEME` | the bundled `hub.rasi` | `.rasi` file for the list; empty means your own rofi config |
+| `ROFI_LAUNCHER_GRID_THEME` | the bundled `grid.rasi` | `.rasi` file for the animations grid |
 | `ROFI_LAUNCHER_DEBUG` | unset | log every rofi call to `~/.cache/rofi-launcher/debug.log` |
 
 ## How it works
@@ -173,12 +222,18 @@ the same rofi instance just gets a new list.
 Debug it without rofi at all:
 
 ```bash
-ROFI_RETV=0 ./launcher.py | cat -v      # what rofi would receive
-./launcher.py --dump-apps               # every entry found, with flags
-./launcher.py --launch firefox.desktop  # launch one directly
+ROFI_RETV=0 ./rofi_hub/hub.py | cat -v          # what rofi would receive
+ROFI_DATA=emoji ROFI_RETV=0 ./rofi_hub/hub.py   # straight into a section
+./rofi_hub/hub.py --dump-apps                   # every entry found
 ```
 
-Key bindings live in `launch.sh` rather than in `~/.config/rofi/config.rasi`, on
+Wallpaper and animations are the only two that open a window of **their own**.
+They need a grid with large thumbnails, and rofi will not restyle itself
+mid-session: its `theme` directive is documented as good only for small things
+like a widget's background colour. The hub closes first — two layer-shell
+surfaces fight over the keyboard, and the second one silently takes no input.
+
+Key bindings live in `bin/hub.sh` rather than in `~/.config/rofi/config.rasi`, on
 purpose: overriding `Ctrl+P` globally would break it for every other rofi menu
 on the machine.
 
@@ -186,10 +241,19 @@ on the machine.
 > key, so `Ctrl+P` in a non-Latin layout is a different binding entirely
 > (`Control+Cyrillic_ze`). Every variant has to be listed, comma-separated, or
 > the key silently does nothing half the time. That is what the list in
-> `launch.sh` is.
+> `bin/hub.sh` is.
 
 ## Limitations
 
+- **Animation previews do not animate.** rofi links only
+  `gdk_pixbuf_new_from_file_at_scale`, the single-frame loader — there is no
+  `gdk_pixbuf_animation_new_from_file` in the binary at all. A GIF would render
+  as its first frame, which for a fade-out is usually an empty rectangle. Each
+  tile is drawn from the preset's own numbers instead and shows a motion trail;
+  `Ctrl+Alt+Space` shows the real thing.
+- **Lists do not refresh while the window is open.** Script mode only calls the
+  script on a selection or a hotkey, so windows and clipboard entries are read
+  when you enter the section.
 - **The wrong-layout pair is one pair.** Two layouts, not three.
 - **Icons are text glyphs, not images.** rofi's script mode can show icons per
   row, but each one costs an icon-theme lookup; this stays with glyphs to keep

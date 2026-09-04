@@ -1,0 +1,117 @@
+/* grid.rasi — тайлы с превью. Используется сеткой анимаций.
+ *
+ * Отдельный файл, а не общий с основным списком: там element-icon задан 24px
+ * под иконки приложений, и превью сплющило бы в точки. Rofi не умеет менять
+ * раскладку по ходу сессии, поэтому сетка живёт в своём окне со своей темой.
+ *
+ * Палитра и шрифт — те же, что у хаба, чтобы это читалось как одна система. */
+
+@theme "/dev/null"
+
+* {
+    bg:          #0a0a0a;
+    bg-element:  #161616;
+    fg:          #ffffff;
+    fg-alt:      #666666;
+    accent:      #ffffff;
+    accent-text: #000000;
+
+    background-color: transparent;
+    text-color: @fg;
+    margin: 0;
+    padding: 0;
+}
+
+window {
+    width: 760px;
+    background-color: @bg;
+    border: 1px solid;
+    border-color: #222222;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+mainbox {
+    spacing: 15px;
+    children: [ inputbar, message, listview ];
+}
+
+inputbar {
+    background-color: @bg-element;
+    border-radius: 12px;
+    padding: 12px 16px;
+    spacing: 12px;
+    children: [ prompt, entry ];
+}
+
+prompt {
+    text-color: @fg-alt;
+    vertical-align: 0.5;
+}
+
+entry {
+    placeholder: "Фильтр...";
+    placeholder-color: @fg-alt;
+    text-color: @fg;
+    vertical-align: 0.5;
+}
+
+message {
+    background-color: @bg-element;
+    border-radius: 12px;
+    padding: 8px 12px;
+}
+
+textbox {
+    background-color: transparent;
+    text-color: @fg-alt;
+    vertical-align: 0.5;
+}
+
+listview {
+    columns: 3;
+    lines: 2;
+    fixed-height: false;
+    spacing: 10px;
+    scrollbar: false;
+    border: 0;
+}
+
+element {
+    orientation: vertical;
+    padding: 8px;
+    spacing: 8px;
+    border-radius: 10px;
+}
+
+element normal.normal, element alternate.normal {
+    background-color: transparent;
+    text-color: @fg;
+}
+
+element selected.normal {
+    background-color: @accent;
+    text-color: @accent-text;
+}
+
+/* 150px, а не 200: тайл анимации шире, чем высок (320×200), и при 200
+   строка из трёх штук не влезает в окно 760px. */
+element-icon {
+    size: 150px;
+    background-color: transparent;
+    horizontal-align: 0.5;
+}
+
+element-text {
+    horizontal-align: 0.5;
+    background-color: transparent;
+    text-color: inherit;
+}
+
+error-message {
+    background-color: @bg;
+    border: 1px solid;
+    border-color: #222222;
+    border-radius: 16px;
+    padding: 20px;
+}

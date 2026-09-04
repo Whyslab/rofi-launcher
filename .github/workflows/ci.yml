@@ -44,7 +44,7 @@ jobs:
       - name: A first call emits a usable menu
         run: |
           set -euo pipefail
-          out=$(ROFI_RETV=0 XDG_CONFIG_HOME=$(mktemp -d) python3 rofi_launcher/launcher.py)
+          out=$(ROFI_RETV=0 XDG_CONFIG_HOME=$(mktemp -d) python3 rofi_hub/hub.py)
           printf '%s' "$out" | grep -q 'use-hot-keys' || { echo "::error::no use-hot-keys directive"; exit 1; }
           printf '%s' "$out" | grep -q 'markup-rows'  || { echo "::error::no markup-rows directive"; exit 1; }
           printf '%s' "$out" | grep -q 'All applications' || { echo "::error::default folders missing"; exit 1; }
@@ -55,7 +55,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import re, sys
-          src = open('rofi_launcher/launcher.py', encoding='utf-8').read()
+          src = open('rofi_hub/sections/apps.py', encoding='utf-8').read()
           builtin = re.search(r'DEFAULT_FOLDERS = """\\\n(.*?)"""', src, re.S).group(1)
           shipped = open('config/folders.example.conf', encoding='utf-8').read()
           if builtin != shipped:
@@ -73,9 +73,12 @@ jobs:
           set -euo pipefail
           SB=$(mktemp -d)
           ./install.sh --prefix "$SB"
-          for f in .local/share/rofi-launcher/launcher.py \
-                   .local/share/rofi-launcher/launch.sh \
-                   .local/share/rofi-launcher/monochrome.rasi \
+          for f in .local/share/rofi-launcher/rofi_hub/hub.py \
+                   .local/share/rofi-launcher/rofi_hub/sections/apps.py \
+                   .local/share/rofi-launcher/bin/hub.sh \
+                   .local/share/rofi-launcher/themes/grid.rasi \
+                   .local/share/rofi-launcher/data/emoji.ru.json \
+                   .local/share/rofi-launcher/data/presets/dissolve.json \
                    .config/rofi-launcher/folders.conf; do
             test -e "$SB$HOME/$f" || { echo "::error::missing $f"; exit 1; }
           done

@@ -7,6 +7,10 @@ or separator byte in an application's name would shift the whole row.
 """
 import launcher
 
+# The protocol writing lives in rofi_hub.rows now: it is shared by every
+# section, not just the application list.
+from rofi_hub import rows
+
 
 def test_the_shipped_default_parses(tmp_path, monkeypatch):
     conf = tmp_path / "folders.conf"
@@ -94,27 +98,27 @@ def test_a_category_folder_keeps_a_stable_order():
 # --- the rofi script protocol -------------------------------------------
 
 def test_a_newline_in_a_row_cannot_break_the_protocol(capsys):
-    launcher.emit_row("first\nsecond")
+    rows.emit_row("first\nsecond")
     out = capsys.readouterr().out
     assert out.count("\n") == 1, "a row must occupy exactly one line"
 
 
 def test_a_separator_byte_in_a_row_is_neutralised(capsys):
-    launcher.emit_row(f"name{launcher.US}injected{launcher.NUL}more")
+    rows.emit_row(f"name{rows.US}injected{rows.NUL}more")
     out = capsys.readouterr().out.rstrip("\n")
-    assert launcher.NUL not in out
-    assert launcher.US not in out
+    assert rows.NUL not in out
+    assert rows.US not in out
 
 
 def test_a_directive_is_emitted_in_the_documented_shape(capsys):
-    launcher.emit_directive("prompt", "Apps")
+    rows.emit_directive("prompt", "Apps")
     out = capsys.readouterr().out
-    assert out == f"{launcher.NUL}prompt{launcher.US}Apps\n"
+    assert out == f"{rows.NUL}prompt{rows.US}Apps\n"
 
 
 def test_row_options_are_separated_correctly(capsys):
-    launcher.emit_row("Row", info="dir:Test", meta="test")
+    rows.emit_row("Row", info="dir:Test", meta="test")
     out = capsys.readouterr().out.rstrip("\n")
-    head, _, tail = out.partition(launcher.NUL)
+    head, _, tail = out.partition(rows.NUL)
     assert head == "Row"
-    assert tail.split(launcher.US) == ["info", "dir:Test", "meta", "test"]
+    assert tail.split(rows.US) == ["info", "dir:Test", "meta", "test"]

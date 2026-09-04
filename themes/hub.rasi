@@ -1,0 +1,118 @@
+/* hub.rasi — тема единого хаба.
+ *
+ * Отдельный файл, а не ~/.config/rofi/config.rasi: там lines: 10, и при
+ * восьми закреплённых приложениях разделы хаба уезжали за нижний край —
+ * их не было видно вообще, хотя ради них всё и затевалось.
+ *
+ * 16 строк: восемь пинов, два разделителя, папки и семь разделов помещаются
+ * без прокрутки. fixed-height: false оставлен — окно всё так же сжимается
+ * под фактическое число строк, так что на коротком списке оно не раздувается.
+ */
+
+@theme "/dev/null"
+
+* {
+    bg: #0a0a0a;           /* Глубокий черный фон */
+    bg-element: #161616;   /* Темно-серый фон поиска */
+    fg: #ffffff;           /* Белый текст */
+    fg-alt: #666666;       /* Серый текст плейсхолдера */
+    accent: #ffffff;       /* Белый акцент */
+    accent-text: #000000;  /* Черный текст на акценте */
+
+    background-color: transparent;
+    text-color: @fg;
+    margin: 0;
+    padding: 0;
+}
+
+window {
+    width: 500px;
+    background-color: @bg;
+    border: 1px solid;
+    border-color: #222222;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+mainbox {
+    spacing: 15px;
+}
+
+inputbar {
+    background-color: @bg-element;
+    border-radius: 12px;
+    padding: 12px 16px;
+    spacing: 12px;
+    children: [ prompt, entry ];
+}
+
+prompt {
+    text-color: @fg-alt;
+    vertical-align: 0.5;
+}
+
+entry {
+    placeholder: "Поиск...";
+    placeholder-color: @fg-alt;
+    text-color: @fg;
+    vertical-align: 0.5;
+}
+
+listview {
+    lines: 13;
+    fixed-height: false;  /* окно сжимается под число строк, а не держит 10 всегда */
+    spacing: 3px;
+    scrollbar: false;
+    border: 0;
+}
+
+element {
+    padding: 7px 14px;
+    border-radius: 10px;
+    spacing: 12px;
+}
+
+element normal.normal, element alternate.normal {
+    background-color: transparent;
+    text-color: @fg;
+}
+
+element selected.normal {
+    background-color: @accent;
+    text-color: @accent-text;
+}
+
+element-icon {
+    size: 22px;
+    background-color: transparent;
+}
+
+element-text {
+    vertical-align: 0.5;
+    background-color: transparent;
+    text-color: inherit;
+}
+
+/* ── Строка подсказки лаунчера (rofi-launcher) ────────────────────── */
+/* Из-за @theme "/dev/null" эти виджеты иначе рисуются вообще без стиля. */
+
+message {
+    background-color: @bg-element;
+    border-radius: 12px;
+    padding: 8px 12px;
+}
+
+textbox {
+    background-color: transparent;
+    text-color: @fg-alt;
+    vertical-align: 0.5;
+}
+
+/* Сообщения об ошибках (rofi -e и собственные ошибки разбора темы) */
+error-message {
+    background-color: @bg;
+    border: 1px solid;
+    border-color: #222222;
+    border-radius: 16px;
+    padding: 20px;
+}

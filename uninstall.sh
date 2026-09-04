@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# uninstall.sh — remove the rofi launcher.
+# uninstall.sh — remove the rofi hub.
 #
 #   ./uninstall.sh                    remove the program, keep your pins
 #   ./uninstall.sh --purge            also remove folders.conf, pins and cache
@@ -32,7 +32,7 @@ CACHE_HOME="${PREFIX}${XDG_CACHE_HOME:-$HOME/.cache}"
 run() { if (( DRY )); then printf '   would run: %s\n' "$*"; else "$@"; fi; }
 (( DRY )) && warn "dry run — nothing will be removed"
 
-say "Removing the launcher"
+say "Removing the hub"
 run rm -rf "${DATA_HOME}/rofi-launcher"
 ok "program removed"
 
@@ -44,6 +44,7 @@ else
     say "Keeping your configuration"
     echo "   ${CONFIG_HOME}/rofi-launcher/folders.conf"
     echo "   ${CONFIG_HOME}/rofi-launcher/favorites.list"
+    echo "   ${CONFIG_HOME}/rofi-launcher/animation-preset"
 fi
 
 echo

@@ -1,21 +1,14 @@
-#!/usr/bin/env python3
 """
-rofi script mode: an application launcher with folders and pinned entries.
+Applications: .desktop scanning, folders, pinned entries, launching.
 
-Protocol: man rofi-script(5).
-  ROFI_RETV=0      — first call
-  ROFI_RETV=1      — a row was selected ($1 = its text, ROFI_INFO = its info field)
-  ROFI_RETV=10..28 — kb-custom-1..19 (needs use-hot-keys=true)
-  ROFI_DATA        — state the script handed to itself on the previous call
-
-Debugging without rofi:
-  ROFI_RETV=0 ./launcher.py | cat -v
-  ./launcher.py --dump-apps
-  ./launcher.py --launch firefox.desktop
+This is the original rofi-launcher, moved under the hub unchanged in behaviour.
+Only two things were taken out of it: the text it shows (now in strings.py, so
+the English and Russian copies stop being two forks of one file) and the raw
+protocol writing (now in rows.py, shared with every other section).
 """
+from __future__ import annotations
 
 import configparser
-import contextlib
 import html
 import json
 import locale
@@ -23,11 +16,10 @@ import os
 import shlex
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 
-US = "\x1f"   # separates key/value pairs
-NUL = "\0"    # prefixes a directive line, and the options part of a row
+from ..rows import ARROW, GLYPH_FOLDER, MARK_PINNED, back_row, dim, note_row
+from ..strings import LOCALES, t
 
 HOME = Path.home()
 CFG_DIR = Path(os.environ.get("XDG_CONFIG_HOME") or HOME / ".config") / "rofi-launcher"
@@ -38,40 +30,8 @@ USAGE_FILE = CACHE_DIR / "usage.json"
 
 TERMINAL = os.environ.get("ROFI_LAUNCHER_TERMINAL", "kitty")
 
-GLYPH_SEARCH = ""     # the root prompt; a glyph here needs a font that has it
-GLYPH_FOLDER = ""  # a folder
-GLYPH_BACK = ""  # the back arrow
-MARK_PINNED = "★"
-ARROW = "→"
-DIM = "#5a5a5a"
-
 # Field codes the desktop entry spec fills in; they have no place in argv.
 FIELD_CODES_DROP = {"%f", "%F", "%u", "%U", "%d", "%D", "%n", "%N", "%v", "%m", "%i"}
-
-HINT_ROOT = "Ctrl+P unpin · Ctrl+Alt+↑↓ reorder"
-HINT_FOLDER = "Ctrl+P pin · Alt+← back"
-
-
-# ─────────────────────────── output to rofi ───────────────────────────
-
-def _clean(value):
-    """Directives and row options are single-line; a newline would derail rofi."""
-    return str(value).replace("\n", " ").replace(NUL, "").replace(US, " ")
-
-
-def emit_directive(key, value):
-    sys.stdout.write(f"{NUL}{_clean(key)}{US}{_clean(value)}\n")
-
-
-def emit_row(text, **opts):
-    line = _clean(text)
-    if opts:
-        line += NUL + US.join(f"{_clean(k)}{US}{_clean(v)}" for k, v in opts.items())
-    sys.stdout.write(line + "\n")
-
-
-def dim(text):
-    return f"<span foreground='{DIM}'>{text}</span>"
 
 
 # ─────────────────────── reading .desktop files ───────────────────────
@@ -114,21 +74,6 @@ def layout_variants(text):
         if swapped != text:
             out.append(swapped)
     return out
-
-
-def _locales():
-    """ru_RU.UTF-8 → ['ru_RU', 'ru']"""
-    lang = os.environ.get("LC_MESSAGES") or os.environ.get("LANG") or ""
-    lang = lang.split(".")[0].split("@")[0]
-    if not lang or lang in ("C", "POSIX"):
-        return []
-    out = [lang]
-    if "_" in lang:
-        out.append(lang.split("_")[0])
-    return out
-
-
-LOCALES = _locales()
 
 
 def _data_dirs():
@@ -438,7 +383,7 @@ def launch(app, desktop_id):
     bump_usage(desktop_id)
 
 
-# ─────────────────────────── rendering ───────────────────────────
+# ─────────────────────────── rows ───────────────────────────
 
 def app_row(desktop_id, app, pinned):
     label = html.escape(app["name"])
@@ -452,205 +397,84 @@ def app_row(desktop_id, app, pinned):
     })
 
 
-def build_root(apps, folders, favorites):
-    rows = []
-    for desktop_id in favorites:
-        if desktop_id in apps:
-            rows.append(app_row(desktop_id, apps[desktop_id], pinned=False))
+def pinned_rows(apps, favorites):
+    """The pinned applications, in the order the favorites file lists them."""
+    return [
+        app_row(i, apps[i], pinned=False)
+        for i in favorites
+        if i in apps
+    ]
 
-    if rows and folders:
-        rows.append(("─" * 24, {
-            "display": dim("─" * 24), "nonselectable": "true", "meta": "",
-        }))
 
-    for folder in folders:
-        rows.append((f"dir:{folder['name']}", {
-            "display": f"{dim(GLYPH_FOLDER)}  {html.escape(folder['name'])}  {dim(ARROW)}",
-            "meta": folder["name"],
-            "info": f"dir:{folder['name']}",
-        }))
-    return rows
+def folder_rows(folders):
+    return [
+        (f"dir:{f['name']}", {
+            "display": f"{dim(GLYPH_FOLDER)}  {html.escape(f['name'])}  {dim(ARROW)}",
+            "meta": f["name"],
+            "info": f"dir:{f['name']}",
+        })
+        for f in folders
+    ]
 
 
 def build_folder(name, apps, folders, favorites):
-    rows = [("..", {
-        "display": f"{dim(GLYPH_BACK)}  {dim('Back')}",
-        "meta": "back up",
-        "info": "up",
-        "permanent": "true",   # stays visible while typing
-    })]
+    rows = [back_row(t("back"), t("back_meta"))]
 
     folder = next((f for f in folders if f["name"] == name), None)
     if folder is None:
-        rows.append(("!", {"display": dim(f"Folder \"{html.escape(name)}\" not found"),
-                           "nonselectable": "true"}))
+        rows.append(note_row(t("folder_not_found", name=name)))
         return rows
 
     ids = resolve_folder(folder, apps, read_usage())
     if not ids:
-        rows.append(("!", {"display": dim("Empty"), "nonselectable": "true"}))
+        rows.append(note_row(t("empty")))
     for desktop_id in ids:
         rows.append(app_row(desktop_id, apps[desktop_id], pinned=desktop_id in favorites))
     return rows
 
 
-def render(level, apps, folders, favorites, select_text=None, message=None):
-    emit_directive("use-hot-keys", "true")   # without this kb-custom never reaches the script
-    emit_directive("markup-rows", "true")
-    emit_directive("no-custom", "true")
-    emit_directive("data", level)
-
-    if level:
-        emit_directive("prompt", f"{GLYPH_FOLDER}  {level}")
-        rows = build_folder(level, apps, folders, favorites)
-        hint = HINT_FOLDER
-    else:
-        if GLYPH_SEARCH:
-            emit_directive("prompt", GLYPH_SEARCH)
-        rows = build_root(apps, folders, favorites)
-        hint = HINT_ROOT
-    emit_directive("message", dim(message or hint))
-
-    if select_text is not None:
-        for index, (text, _) in enumerate(rows):
-            if text == select_text:
-                emit_directive("keep-selection", "true")
-                emit_directive("new-selection", str(index))
-                break
-
-    for text, opts in rows:
-        emit_row(text, **opts)
-
-
 # ─────────────────────────── hotkey actions ───────────────────────────
-
-def selected_id(info, argv_text):
-    """info is more reliable, but is not guaranteed on kb-custom — the row text is the id."""
-    if info.startswith("app:"):
-        return info[4:]
-    if info.startswith("dir:") or info == "up":
-        return None
-    return argv_text or None
-
 
 def hotkey_pin(desktop_id, apps, favorites):
     """A toggle. Ctrl+Shift+P depends on the layout more heavily (an uppercase
     keysym), so unpinning has to be possible with plain Ctrl+P alone."""
     if not desktop_id or desktop_id not in apps:
-        return favorites, "Nothing to pin here"
+        return favorites, t("nothing_to_pin")
     name = apps[desktop_id]["name"]
     if desktop_id in favorites:
         favorites.remove(desktop_id)
         write_favorites(favorites)
-        return favorites, f"\"{name}\" unpinned"
+        return favorites, t("unpinned", name=name)
     favorites.append(desktop_id)
     write_favorites(favorites)
-    return favorites, f"\"{name}\" pinned"
+    return favorites, t("pinned", name=name)
 
 
 def hotkey_unpin(desktop_id, apps, favorites):
     if not desktop_id or desktop_id not in favorites:
-        return favorites, "That application is not pinned"
+        return favorites, t("not_pinned")
     favorites.remove(desktop_id)
     write_favorites(favorites)
     name = apps[desktop_id]["name"] if desktop_id in apps else desktop_id
-    return favorites, f"\"{name}\" unpinned"
+    return favorites, t("unpinned", name=name)
 
 
 def hotkey_move(desktop_id, favorites, delta):
     if not desktop_id or desktop_id not in favorites:
-        return favorites, "Only pinned entries can be moved"
+        return favorites, t("only_pinned_move")
     old = favorites.index(desktop_id)
     new = max(0, min(len(favorites) - 1, old + delta))
     if new == old:
-        return favorites, "Already at the end"
+        return favorites, t("at_the_end")
     favorites.insert(new, favorites.pop(old))
     write_favorites(favorites)
     return favorites, None
 
 
-# ─────────────────────────── entry point ───────────────────────────
-
-def main():
-    with contextlib.suppress(locale.Error):
-        locale.setlocale(locale.LC_COLLATE, "")
-
-    argv_text = sys.argv[1] if len(sys.argv) > 1 else ""
-
-    if os.environ.get("ROFI_LAUNCHER_DEBUG"):
-        try:
-            CACHE_DIR.mkdir(parents=True, exist_ok=True)
-            with open(CACHE_DIR / "debug.log", "a", encoding="utf-8") as fh:
-                fh.write("RETV={!r} INFO={!r} DATA={!r} argv={!r}\n".format(
-                    os.environ.get("ROFI_RETV"), os.environ.get("ROFI_INFO"),
-                    os.environ.get("ROFI_DATA"), sys.argv[1:]))
-        except OSError:
-            pass
-
-    # Manual modes for debugging, outside rofi.
-    if argv_text == "--dump-apps":
-        apps = scan_apps()
-        for desktop_id in sorted(apps, key=lambda i: _sort_key(apps, i)):
-            app = apps[desktop_id]
-            flags = "T" if app["terminal"] else "-"
-            flags += "D" if app["dbus"] else "-"
-            print(f"{flags}  {desktop_id:<40} {app['name']}")
-        print(f"\ntotal: {len(apps)}")
-        return
-    if argv_text == "--launch":
-        apps = scan_apps()
-        desktop_id = sys.argv[2]
-        launch(apps[desktop_id], desktop_id)
-        return
-
-    retv = int(os.environ.get("ROFI_RETV", "0") or 0)
-    info = os.environ.get("ROFI_INFO", "")
-    level = os.environ.get("ROFI_DATA", "")
-
-    apps = scan_apps()
-    folders = load_folders()
-    favorites = read_favorites()
-
-    if retv == 1:
-        if info == "up" or argv_text == "..":
-            render("", apps, folders, favorites, select_text=f"dir:{level}")
-            return
-        if info.startswith("dir:"):
-            render(info[4:], apps, folders, favorites)
-            return
-        desktop_id = selected_id(info, argv_text)
-        if desktop_id and desktop_id in apps:
-            launch(apps[desktop_id], desktop_id)
-            return  # empty output → rofi closes
-        render(level, apps, folders, favorites)
-        return
-
-    if retv >= 10:
-        desktop_id = selected_id(info, argv_text)
-        message = None
-        if retv == 10:      # Ctrl+P
-            favorites, message = hotkey_pin(desktop_id, apps, favorites)
-        elif retv == 11:    # kb-custom-2 — not bound to anything by default
-            favorites, message = hotkey_unpin(desktop_id, apps, favorites)
-        elif retv == 12:    # Ctrl+Alt+Up
-            favorites, message = hotkey_move(desktop_id, favorites, -1)
-        elif retv == 13:    # Ctrl+Alt+Down
-            favorites, message = hotkey_move(desktop_id, favorites, +1)
-        elif retv == 14:    # Alt+Left / Alt+BackSpace
-            render("", apps, folders, favorites, select_text=f"dir:{level}")
-            return
-        render(level, apps, folders, favorites,
-               select_text=desktop_id, message=message)
-        return
-
-    render(level, apps, folders, favorites)
-
-
-if __name__ == "__main__":
-    try:
-        main()
-    except Exception as exc:  # otherwise any bug looks like a successful launch
-        emit_directive("message", f"Launcher error: {html.escape(str(exc))}")
-        emit_row("Error — run rofi -show apps from a terminal for details",
-                 nonselectable="true")
-        sys.exit(0)
+__all__ = [
+    "CACHE_DIR", "CFG_DIR", "FAVORITES_FILE", "FOLDERS_FILE", "USAGE_FILE",
+    "app_row", "build_folder", "folder_rows", "hotkey_move", "hotkey_pin",
+    "hotkey_unpin", "launch", "layout_variants", "load_folders", "pinned_rows",
+    "read_favorites", "read_usage", "resolve_folder", "scan_apps",
+    "write_favorites",
+]

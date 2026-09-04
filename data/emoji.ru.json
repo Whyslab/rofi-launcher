@@ -1,0 +1,3338 @@
+[
+ {
+  "char": "😀",
+  "name": "улыбка",
+  "aliases": "смайл радость happy grin",
+  "category": "Лица"
+ },
+ {
+  "char": "😃",
+  "name": "радость",
+  "aliases": "улыбка весело happy smile",
+  "category": "Лица"
+ },
+ {
+  "char": "😄",
+  "name": "смех",
+  "aliases": "улыбка весело laugh smile",
+  "category": "Лица"
+ },
+ {
+  "char": "😁",
+  "name": "ухмылка",
+  "aliases": "зубы улыбка grin",
+  "category": "Лица"
+ },
+ {
+  "char": "😆",
+  "name": "хохот",
+  "aliases": "смех ржу laugh",
+  "category": "Лица"
+ },
+ {
+  "char": "😅",
+  "name": "нервный смех",
+  "aliases": "пот неловко sweat laugh",
+  "category": "Лица"
+ },
+ {
+  "char": "🤣",
+  "name": "катаюсь со смеху",
+  "aliases": "ржу лол rofl лежу",
+  "category": "Лица"
+ },
+ {
+  "char": "😂",
+  "name": "слёзы от смеха",
+  "aliases": "ржу лол joy плачу от смеха",
+  "category": "Лица"
+ },
+ {
+  "char": "🙂",
+  "name": "лёгкая улыбка",
+  "aliases": "слегка smile",
+  "category": "Лица"
+ },
+ {
+  "char": "🙃",
+  "name": "вверх ногами",
+  "aliases": "перевёрнутый ирония upside",
+  "category": "Лица"
+ },
+ {
+  "char": "😉",
+  "name": "подмигивание",
+  "aliases": "подмигнул wink",
+  "category": "Лица"
+ },
+ {
+  "char": "😊",
+  "name": "смущённая улыбка",
+  "aliases": "мило blush",
+  "category": "Лица"
+ },
+ {
+  "char": "😇",
+  "name": "нимб",
+  "aliases": "ангел святой innocent halo",
+  "category": "Лица"
+ },
+ {
+  "char": "🥰",
+  "name": "влюблён",
+  "aliases": "сердечки любовь love",
+  "category": "Лица"
+ },
+ {
+  "char": "😍",
+  "name": "глаза-сердечки",
+  "aliases": "влюблён восторг love",
+  "category": "Лица"
+ },
+ {
+  "char": "🤩",
+  "name": "звёзды в глазах",
+  "aliases": "восторг вау star",
+  "category": "Лица"
+ },
+ {
+  "char": "😘",
+  "name": "воздушный поцелуй",
+  "aliases": "чмок kiss целую",
+  "category": "Лица"
+ },
+ {
+  "char": "😗",
+  "name": "поцелуй",
+  "aliases": "чмок kiss",
+  "category": "Лица"
+ },
+ {
+  "char": "😋",
+  "name": "вкусно",
+  "aliases": "язык объедение yum",
+  "category": "Лица"
+ },
+ {
+  "char": "😛",
+  "name": "язык",
+  "aliases": "дразнить tongue",
+  "category": "Лица"
+ },
+ {
+  "char": "😜",
+  "name": "язык и подмигивание",
+  "aliases": "дурачусь wink tongue",
+  "category": "Лица"
+ },
+ {
+  "char": "🤪",
+  "name": "сумасшедший",
+  "aliases": "дурашка чокнутый crazy zany",
+  "category": "Лица"
+ },
+ {
+  "char": "🤨",
+  "name": "бровь",
+  "aliases": "недоверие сомнение eyebrow",
+  "category": "Лица"
+ },
+ {
+  "char": "🧐",
+  "name": "монокль",
+  "aliases": "разглядываю изучаю monocle",
+  "category": "Лица"
+ },
+ {
+  "char": "🤓",
+  "name": "ботаник",
+  "aliases": "очки умник nerd",
+  "category": "Лица"
+ },
+ {
+  "char": "😎",
+  "name": "в очках",
+  "aliases": "круто солнечные очки cool sunglasses",
+  "category": "Лица"
+ },
+ {
+  "char": "🥳",
+  "name": "праздник",
+  "aliases": "вечеринка колпак party",
+  "category": "Лица"
+ },
+ {
+  "char": "😏",
+  "name": "самодовольство",
+  "aliases": "ухмылка smirk",
+  "category": "Лица"
+ },
+ {
+  "char": "😒",
+  "name": "недовольство",
+  "aliases": "фу неохота unamused",
+  "category": "Лица"
+ },
+ {
+  "char": "😞",
+  "name": "разочарование",
+  "aliases": "грусть sad disappointed",
+  "category": "Лица"
+ },
+ {
+  "char": "😔",
+  "name": "печаль",
+  "aliases": "грусть уныние pensive",
+  "category": "Лица"
+ },
+ {
+  "char": "😟",
+  "name": "беспокойство",
+  "aliases": "тревога worried",
+  "category": "Лица"
+ },
+ {
+  "char": "😕",
+  "name": "смятение",
+  "aliases": "непонятно confused",
+  "category": "Лица"
+ },
+ {
+  "char": "🙁",
+  "name": "лёгкая грусть",
+  "aliases": "хмурый frown",
+  "category": "Лица"
+ },
+ {
+  "char": "😣",
+  "name": "мучение",
+  "aliases": "терплю persevere",
+  "category": "Лица"
+ },
+ {
+  "char": "😖",
+  "name": "досада",
+  "aliases": "терплю confounded",
+  "category": "Лица"
+ },
+ {
+  "char": "😫",
+  "name": "устал",
+  "aliases": "измучен tired",
+  "category": "Лица"
+ },
+ {
+  "char": "😩",
+  "name": "изнеможение",
+  "aliases": "устал weary",
+  "category": "Лица"
+ },
+ {
+  "char": "🥺",
+  "name": "умоляю",
+  "aliases": "щенячьи глазки pleading просьба",
+  "category": "Лица"
+ },
+ {
+  "char": "😢",
+  "name": "плачу",
+  "aliases": "слеза грусть cry",
+  "category": "Лица"
+ },
+ {
+  "char": "😭",
+  "name": "рыдаю",
+  "aliases": "слёзы плач sob",
+  "category": "Лица"
+ },
+ {
+  "char": "😤",
+  "name": "пар из носа",
+  "aliases": "злюсь решимость triumph",
+  "category": "Лица"
+ },
+ {
+  "char": "😠",
+  "name": "злость",
+  "aliases": "сержусь angry",
+  "category": "Лица"
+ },
+ {
+  "char": "😡",
+  "name": "ярость",
+  "aliases": "бешенство rage красный",
+  "category": "Лица"
+ },
+ {
+  "char": "🤬",
+  "name": "ругань",
+  "aliases": "мат censored swearing",
+  "category": "Лица"
+ },
+ {
+  "char": "🤯",
+  "name": "взрыв мозга",
+  "aliases": "шок mind blown офигеть",
+  "category": "Лица"
+ },
+ {
+  "char": "😳",
+  "name": "покраснел",
+  "aliases": "смущение неловко flushed",
+  "category": "Лица"
+ },
+ {
+  "char": "🥵",
+  "name": "жарко",
+  "aliases": "перегрев hot жара",
+  "category": "Лица"
+ },
+ {
+  "char": "🥶",
+  "name": "холодно",
+  "aliases": "мороз замёрз cold",
+  "category": "Лица"
+ },
+ {
+  "char": "😱",
+  "name": "ужас",
+  "aliases": "крик scream шок",
+  "category": "Лица"
+ },
+ {
+  "char": "😨",
+  "name": "испуг",
+  "aliases": "страх fearful",
+  "category": "Лица"
+ },
+ {
+  "char": "😰",
+  "name": "тревога",
+  "aliases": "пот холодный anxious",
+  "category": "Лица"
+ },
+ {
+  "char": "😥",
+  "name": "облегчение с грустью",
+  "aliases": "уф sad relieved",
+  "category": "Лица"
+ },
+ {
+  "char": "😓",
+  "name": "пот",
+  "aliases": "устал тяжело downcast",
+  "category": "Лица"
+ },
+ {
+  "char": "🤗",
+  "name": "обнимаю",
+  "aliases": "объятия hug",
+  "category": "Лица"
+ },
+ {
+  "char": "🤔",
+  "name": "думаю",
+  "aliases": "размышляю thinking хм",
+  "category": "Лица"
+ },
+ {
+  "char": "🤭",
+  "name": "ой",
+  "aliases": "прикрыл рот hand over mouth",
+  "category": "Лица"
+ },
+ {
+  "char": "🤫",
+  "name": "тише",
+  "aliases": "тсс молчи shush secret",
+  "category": "Лица"
+ },
+ {
+  "char": "🤥",
+  "name": "вру",
+  "aliases": "нос ложь lying pinocchio",
+  "category": "Лица"
+ },
+ {
+  "char": "😶",
+  "name": "без слов",
+  "aliases": "молчу no mouth",
+  "category": "Лица"
+ },
+ {
+  "char": "😐",
+  "name": "нейтрально",
+  "aliases": "покерфейс neutral",
+  "category": "Лица"
+ },
+ {
+  "char": "😑",
+  "name": "без эмоций",
+  "aliases": "устал expressionless",
+  "category": "Лица"
+ },
+ {
+  "char": "😬",
+  "name": "неловко",
+  "aliases": "зубы grimace",
+  "category": "Лица"
+ },
+ {
+  "char": "🙄",
+  "name": "закатил глаза",
+  "aliases": "ну конечно eye roll",
+  "category": "Лица"
+ },
+ {
+  "char": "😯",
+  "name": "удивление",
+  "aliases": "ох hushed",
+  "category": "Лица"
+ },
+ {
+  "char": "😦",
+  "name": "хмурюсь с открытым ртом",
+  "aliases": "frowning",
+  "category": "Лица"
+ },
+ {
+  "char": "😮",
+  "name": "ох",
+  "aliases": "удивлён open mouth",
+  "category": "Лица"
+ },
+ {
+  "char": "😲",
+  "name": "потрясён",
+  "aliases": "шок astonished",
+  "category": "Лица"
+ },
+ {
+  "char": "🥱",
+  "name": "зевота",
+  "aliases": "спать скучно yawn",
+  "category": "Лица"
+ },
+ {
+  "char": "😴",
+  "name": "сплю",
+  "aliases": "сон zzz sleeping",
+  "category": "Лица"
+ },
+ {
+  "char": "🤤",
+  "name": "слюни",
+  "aliases": "хочу drooling",
+  "category": "Лица"
+ },
+ {
+  "char": "😪",
+  "name": "сонный",
+  "aliases": "устал sleepy",
+  "category": "Лица"
+ },
+ {
+  "char": "😵",
+  "name": "в отключке",
+  "aliases": "круги dizzy",
+  "category": "Лица"
+ },
+ {
+  "char": "🤐",
+  "name": "рот на замок",
+  "aliases": "молчу zipper",
+  "category": "Лица"
+ },
+ {
+  "char": "🥴",
+  "name": "поплыл",
+  "aliases": "пьяный woozy",
+  "category": "Лица"
+ },
+ {
+  "char": "🤢",
+  "name": "тошнит",
+  "aliases": "фу nauseated",
+  "category": "Лица"
+ },
+ {
+  "char": "🤮",
+  "name": "рвота",
+  "aliases": "блюю vomit",
+  "category": "Лица"
+ },
+ {
+  "char": "🤧",
+  "name": "чихаю",
+  "aliases": "простуда sneeze",
+  "category": "Лица"
+ },
+ {
+  "char": "😷",
+  "name": "маска",
+  "aliases": "болею mask",
+  "category": "Лица"
+ },
+ {
+  "char": "🤒",
+  "name": "температура",
+  "aliases": "болею градусник fever",
+  "category": "Лица"
+ },
+ {
+  "char": "🤕",
+  "name": "травма",
+  "aliases": "бинт повязка bandage",
+  "category": "Лица"
+ },
+ {
+  "char": "🤑",
+  "name": "деньги в глазах",
+  "aliases": "богат money",
+  "category": "Лица"
+ },
+ {
+  "char": "🤠",
+  "name": "ковбой",
+  "aliases": "шляпа cowboy",
+  "category": "Лица"
+ },
+ {
+  "char": "😈",
+  "name": "чертёнок",
+  "aliases": "дьявол злой devil",
+  "category": "Лица"
+ },
+ {
+  "char": "👿",
+  "name": "злой чёрт",
+  "aliases": "дьявол imp",
+  "category": "Лица"
+ },
+ {
+  "char": "💀",
+  "name": "череп",
+  "aliases": "смерть skull капец",
+  "category": "Лица"
+ },
+ {
+  "char": "☠️",
+  "name": "череп с костями",
+  "aliases": "смерть яд skull crossbones",
+  "category": "Лица"
+ },
+ {
+  "char": "👻",
+  "name": "привидение",
+  "aliases": "призрак ghost",
+  "category": "Лица"
+ },
+ {
+  "char": "👽",
+  "name": "инопланетянин",
+  "aliases": "пришелец alien",
+  "category": "Лица"
+ },
+ {
+  "char": "🤖",
+  "name": "робот",
+  "aliases": "бот robot",
+  "category": "Лица"
+ },
+ {
+  "char": "💩",
+  "name": "какашка",
+  "aliases": "говно poop",
+  "category": "Лица"
+ },
+ {
+  "char": "🤡",
+  "name": "клоун",
+  "aliases": "clown",
+  "category": "Лица"
+ },
+ {
+  "char": "👹",
+  "name": "они",
+  "aliases": "демон ogre",
+  "category": "Лица"
+ },
+ {
+  "char": "🎃",
+  "name": "тыква",
+  "aliases": "хэллоуин pumpkin",
+  "category": "Лица"
+ },
+ {
+  "char": "👍",
+  "name": "палец вверх",
+  "aliases": "лайк одобряю thumbs up",
+  "category": "Жесты"
+ },
+ {
+  "char": "👎",
+  "name": "палец вниз",
+  "aliases": "дизлайк thumbs down",
+  "category": "Жесты"
+ },
+ {
+  "char": "👌",
+  "name": "окей",
+  "aliases": "ок ok жест",
+  "category": "Жесты"
+ },
+ {
+  "char": "🤌",
+  "name": "щепотка",
+  "aliases": "итальянский жест pinched",
+  "category": "Жесты"
+ },
+ {
+  "char": "✌️",
+  "name": "виктория",
+  "aliases": "мир два пальца victory peace",
+  "category": "Жесты"
+ },
+ {
+  "char": "🤞",
+  "name": "скрещенные пальцы",
+  "aliases": "удача crossed fingers",
+  "category": "Жесты"
+ },
+ {
+  "char": "🤟",
+  "name": "люблю тебя",
+  "aliases": "жест love you",
+  "category": "Жесты"
+ },
+ {
+  "char": "🤘",
+  "name": "коза",
+  "aliases": "рок horns",
+  "category": "Жесты"
+ },
+ {
+  "char": "🤙",
+  "name": "позвони",
+  "aliases": "шака call me",
+  "category": "Жесты"
+ },
+ {
+  "char": "👈",
+  "name": "палец влево",
+  "aliases": "туда left",
+  "category": "Жесты"
+ },
+ {
+  "char": "👉",
+  "name": "палец вправо",
+  "aliases": "туда right",
+  "category": "Жесты"
+ },
+ {
+  "char": "👆",
+  "name": "палец вверх указ",
+  "aliases": "туда up",
+  "category": "Жесты"
+ },
+ {
+  "char": "👇",
+  "name": "палец вниз указ",
+  "aliases": "туда down",
+  "category": "Жесты"
+ },
+ {
+  "char": "☝️",
+  "name": "указательный палец",
+  "aliases": "один момент index",
+  "category": "Жесты"
+ },
+ {
+  "char": "✋",
+  "name": "ладонь",
+  "aliases": "стоп hand stop",
+  "category": "Жесты"
+ },
+ {
+  "char": "🤚",
+  "name": "тыльная сторона ладони",
+  "aliases": "raised back hand",
+  "category": "Жесты"
+ },
+ {
+  "char": "🖐️",
+  "name": "растопыренная ладонь",
+  "aliases": "пять hand",
+  "category": "Жесты"
+ },
+ {
+  "char": "🖖",
+  "name": "вулкан",
+  "aliases": "спок vulcan",
+  "category": "Жесты"
+ },
+ {
+  "char": "👋",
+  "name": "привет",
+  "aliases": "машу рукой wave пока",
+  "category": "Жесты"
+ },
+ {
+  "char": "🤝",
+  "name": "рукопожатие",
+  "aliases": "договорились handshake сделка",
+  "category": "Жесты"
+ },
+ {
+  "char": "👏",
+  "name": "аплодисменты",
+  "aliases": "хлопаю браво clap",
+  "category": "Жесты"
+ },
+ {
+  "char": "🙌",
+  "name": "руки вверх",
+  "aliases": "ура празднование raised hands",
+  "category": "Жесты"
+ },
+ {
+  "char": "🙏",
+  "name": "спасибо",
+  "aliases": "молю пожалуйста pray прошу",
+  "category": "Жесты"
+ },
+ {
+  "char": "✍️",
+  "name": "пишу",
+  "aliases": "рука пишет writing",
+  "category": "Жесты"
+ },
+ {
+  "char": "💪",
+  "name": "мышца",
+  "aliases": "сила бицепс muscle",
+  "category": "Жесты"
+ },
+ {
+  "char": "🦾",
+  "name": "протез руки",
+  "aliases": "механическая mechanical arm",
+  "category": "Жесты"
+ },
+ {
+  "char": "👊",
+  "name": "кулак",
+  "aliases": "удар fist punch",
+  "category": "Жесты"
+ },
+ {
+  "char": "✊",
+  "name": "поднятый кулак",
+  "aliases": "солидарность raised fist",
+  "category": "Жесты"
+ },
+ {
+  "char": "🖕",
+  "name": "средний палец",
+  "aliases": "фак middle finger",
+  "category": "Жесты"
+ },
+ {
+  "char": "👀",
+  "name": "глаза",
+  "aliases": "смотрю eyes слежу",
+  "category": "Жесты"
+ },
+ {
+  "char": "👁️",
+  "name": "глаз",
+  "aliases": "eye",
+  "category": "Жесты"
+ },
+ {
+  "char": "🧠",
+  "name": "мозг",
+  "aliases": "думаю brain",
+  "category": "Жесты"
+ },
+ {
+  "char": "👅",
+  "name": "язык",
+  "aliases": "tongue",
+  "category": "Жесты"
+ },
+ {
+  "char": "👂",
+  "name": "ухо",
+  "aliases": "слышу ear",
+  "category": "Жесты"
+ },
+ {
+  "char": "👃",
+  "name": "нос",
+  "aliases": "запах nose",
+  "category": "Жесты"
+ },
+ {
+  "char": "❤️",
+  "name": "красное сердце",
+  "aliases": "любовь сердечко heart",
+  "category": "Сердца"
+ },
+ {
+  "char": "🧡",
+  "name": "оранжевое сердце",
+  "aliases": "orange heart",
+  "category": "Сердца"
+ },
+ {
+  "char": "💛",
+  "name": "жёлтое сердце",
+  "aliases": "yellow heart",
+  "category": "Сердца"
+ },
+ {
+  "char": "💚",
+  "name": "зелёное сердце",
+  "aliases": "green heart",
+  "category": "Сердца"
+ },
+ {
+  "char": "💙",
+  "name": "синее сердце",
+  "aliases": "blue heart",
+  "category": "Сердца"
+ },
+ {
+  "char": "💜",
+  "name": "фиолетовое сердце",
+  "aliases": "purple heart",
+  "category": "Сердца"
+ },
+ {
+  "char": "🖤",
+  "name": "чёрное сердце",
+  "aliases": "black heart",
+  "category": "Сердца"
+ },
+ {
+  "char": "🤍",
+  "name": "белое сердце",
+  "aliases": "white heart",
+  "category": "Сердца"
+ },
+ {
+  "char": "🤎",
+  "name": "коричневое сердце",
+  "aliases": "brown heart",
+  "category": "Сердца"
+ },
+ {
+  "char": "💔",
+  "name": "разбитое сердце",
+  "aliases": "расставание broken heart",
+  "category": "Сердца"
+ },
+ {
+  "char": "❣️",
+  "name": "сердце восклицание",
+  "aliases": "heart exclamation",
+  "category": "Сердца"
+ },
+ {
+  "char": "💕",
+  "name": "два сердца",
+  "aliases": "любовь two hearts",
+  "category": "Сердца"
+ },
+ {
+  "char": "💞",
+  "name": "кружащиеся сердца",
+  "aliases": "revolving hearts",
+  "category": "Сердца"
+ },
+ {
+  "char": "💓",
+  "name": "бьющееся сердце",
+  "aliases": "beating heart",
+  "category": "Сердца"
+ },
+ {
+  "char": "💗",
+  "name": "растущее сердце",
+  "aliases": "growing heart",
+  "category": "Сердца"
+ },
+ {
+  "char": "💖",
+  "name": "сверкающее сердце",
+  "aliases": "sparkling heart",
+  "category": "Сердца"
+ },
+ {
+  "char": "💘",
+  "name": "сердце со стрелой",
+  "aliases": "купидон cupid",
+  "category": "Сердца"
+ },
+ {
+  "char": "💝",
+  "name": "сердце с лентой",
+  "aliases": "подарок gift heart",
+  "category": "Сердца"
+ },
+ {
+  "char": "💯",
+  "name": "сто",
+  "aliases": "стопудово 100 hundred точно",
+  "category": "Сердца"
+ },
+ {
+  "char": "💢",
+  "name": "злость",
+  "aliases": "вена anger",
+  "category": "Сердца"
+ },
+ {
+  "char": "💥",
+  "name": "взрыв",
+  "aliases": "бум collision boom",
+  "category": "Сердца"
+ },
+ {
+  "char": "💫",
+  "name": "головокружение",
+  "aliases": "звёздочки dizzy",
+  "category": "Сердца"
+ },
+ {
+  "char": "💦",
+  "name": "капли",
+  "aliases": "брызги sweat droplets",
+  "category": "Сердца"
+ },
+ {
+  "char": "💨",
+  "name": "рывок",
+  "aliases": "дым умчался dash",
+  "category": "Сердца"
+ },
+ {
+  "char": "🕳️",
+  "name": "дыра",
+  "aliases": "hole",
+  "category": "Сердца"
+ },
+ {
+  "char": "💬",
+  "name": "реплика",
+  "aliases": "сообщение speech bubble",
+  "category": "Сердца"
+ },
+ {
+  "char": "💭",
+  "name": "мысль",
+  "aliases": "облачко thought bubble",
+  "category": "Сердца"
+ },
+ {
+  "char": "🗯️",
+  "name": "гневная реплика",
+  "aliases": "anger bubble",
+  "category": "Сердца"
+ },
+ {
+  "char": "💤",
+  "name": "зззз",
+  "aliases": "сон zzz сплю спящий режим sleep",
+  "category": "Сердца"
+ },
+ {
+  "char": "🐶",
+  "name": "собака",
+  "aliases": "пёс щенок dog",
+  "category": "Животные"
+ },
+ {
+  "char": "🐱",
+  "name": "кот",
+  "aliases": "кошка киса cat",
+  "category": "Животные"
+ },
+ {
+  "char": "🐭",
+  "name": "мышь",
+  "aliases": "мышка mouse",
+  "category": "Животные"
+ },
+ {
+  "char": "🐹",
+  "name": "хомяк",
+  "aliases": "hamster",
+  "category": "Животные"
+ },
+ {
+  "char": "🐰",
+  "name": "кролик",
+  "aliases": "заяц rabbit",
+  "category": "Животные"
+ },
+ {
+  "char": "🦊",
+  "name": "лиса",
+  "aliases": "лисица fox",
+  "category": "Животные"
+ },
+ {
+  "char": "🐻",
+  "name": "медведь",
+  "aliases": "мишка bear",
+  "category": "Животные"
+ },
+ {
+  "char": "🐼",
+  "name": "панда",
+  "aliases": "panda",
+  "category": "Животные"
+ },
+ {
+  "char": "🐨",
+  "name": "коала",
+  "aliases": "koala",
+  "category": "Животные"
+ },
+ {
+  "char": "🐯",
+  "name": "тигр",
+  "aliases": "tiger",
+  "category": "Животные"
+ },
+ {
+  "char": "🦁",
+  "name": "лев",
+  "aliases": "lion",
+  "category": "Животные"
+ },
+ {
+  "char": "🐮",
+  "name": "корова",
+  "aliases": "cow",
+  "category": "Животные"
+ },
+ {
+  "char": "🐷",
+  "name": "свинья",
+  "aliases": "поросёнок pig",
+  "category": "Животные"
+ },
+ {
+  "char": "🐸",
+  "name": "лягушка",
+  "aliases": "жаба frog",
+  "category": "Животные"
+ },
+ {
+  "char": "🐵",
+  "name": "обезьяна",
+  "aliases": "мартышка monkey",
+  "category": "Животные"
+ },
+ {
+  "char": "🙈",
+  "name": "не вижу",
+  "aliases": "обезьяна закрыла глаза see no evil",
+  "category": "Животные"
+ },
+ {
+  "char": "🙉",
+  "name": "не слышу",
+  "aliases": "обезьяна уши hear no evil",
+  "category": "Животные"
+ },
+ {
+  "char": "🙊",
+  "name": "не скажу",
+  "aliases": "обезьяна рот speak no evil",
+  "category": "Животные"
+ },
+ {
+  "char": "🐔",
+  "name": "курица",
+  "aliases": "chicken",
+  "category": "Животные"
+ },
+ {
+  "char": "🐧",
+  "name": "пингвин",
+  "aliases": "penguin",
+  "category": "Животные"
+ },
+ {
+  "char": "🐦",
+  "name": "птица",
+  "aliases": "птичка bird",
+  "category": "Животные"
+ },
+ {
+  "char": "🦆",
+  "name": "утка",
+  "aliases": "duck",
+  "category": "Животные"
+ },
+ {
+  "char": "🦉",
+  "name": "сова",
+  "aliases": "owl",
+  "category": "Животные"
+ },
+ {
+  "char": "🦇",
+  "name": "летучая мышь",
+  "aliases": "bat",
+  "category": "Животные"
+ },
+ {
+  "char": "🐺",
+  "name": "волк",
+  "aliases": "wolf",
+  "category": "Животные"
+ },
+ {
+  "char": "🐗",
+  "name": "кабан",
+  "aliases": "boar",
+  "category": "Животные"
+ },
+ {
+  "char": "🐴",
+  "name": "лошадь",
+  "aliases": "конь horse",
+  "category": "Животные"
+ },
+ {
+  "char": "🦄",
+  "name": "единорог",
+  "aliases": "unicorn",
+  "category": "Животные"
+ },
+ {
+  "char": "🐝",
+  "name": "пчела",
+  "aliases": "bee",
+  "category": "Животные"
+ },
+ {
+  "char": "🐛",
+  "name": "гусеница",
+  "aliases": "червяк bug баг",
+  "category": "Животные"
+ },
+ {
+  "char": "🦋",
+  "name": "бабочка",
+  "aliases": "butterfly",
+  "category": "Животные"
+ },
+ {
+  "char": "🐌",
+  "name": "улитка",
+  "aliases": "медленно snail",
+  "category": "Животные"
+ },
+ {
+  "char": "🐞",
+  "name": "божья коровка",
+  "aliases": "ladybug",
+  "category": "Животные"
+ },
+ {
+  "char": "🐜",
+  "name": "муравей",
+  "aliases": "ant",
+  "category": "Животные"
+ },
+ {
+  "char": "🕷️",
+  "name": "паук",
+  "aliases": "spider",
+  "category": "Животные"
+ },
+ {
+  "char": "🦂",
+  "name": "скорпион",
+  "aliases": "scorpion",
+  "category": "Животные"
+ },
+ {
+  "char": "🐢",
+  "name": "черепаха",
+  "aliases": "turtle",
+  "category": "Животные"
+ },
+ {
+  "char": "🐍",
+  "name": "змея",
+  "aliases": "snake",
+  "category": "Животные"
+ },
+ {
+  "char": "🦎",
+  "name": "ящерица",
+  "aliases": "lizard",
+  "category": "Животные"
+ },
+ {
+  "char": "🐙",
+  "name": "осьминог",
+  "aliases": "octopus",
+  "category": "Животные"
+ },
+ {
+  "char": "🦑",
+  "name": "кальмар",
+  "aliases": "squid",
+  "category": "Животные"
+ },
+ {
+  "char": "🦐",
+  "name": "креветка",
+  "aliases": "shrimp",
+  "category": "Животные"
+ },
+ {
+  "char": "🦀",
+  "name": "краб",
+  "aliases": "crab",
+  "category": "Животные"
+ },
+ {
+  "char": "🐟",
+  "name": "рыба",
+  "aliases": "fish",
+  "category": "Животные"
+ },
+ {
+  "char": "🐬",
+  "name": "дельфин",
+  "aliases": "dolphin",
+  "category": "Животные"
+ },
+ {
+  "char": "🐳",
+  "name": "кит",
+  "aliases": "whale",
+  "category": "Животные"
+ },
+ {
+  "char": "🦈",
+  "name": "акула",
+  "aliases": "shark",
+  "category": "Животные"
+ },
+ {
+  "char": "🐊",
+  "name": "крокодил",
+  "aliases": "crocodile",
+  "category": "Животные"
+ },
+ {
+  "char": "🐘",
+  "name": "слон",
+  "aliases": "elephant",
+  "category": "Животные"
+ },
+ {
+  "char": "🦒",
+  "name": "жираф",
+  "aliases": "giraffe",
+  "category": "Животные"
+ },
+ {
+  "char": "🐿️",
+  "name": "белка",
+  "aliases": "chipmunk",
+  "category": "Животные"
+ },
+ {
+  "char": "🦔",
+  "name": "ёж",
+  "aliases": "ёжик hedgehog",
+  "category": "Животные"
+ },
+ {
+  "char": "🐾",
+  "name": "лапки",
+  "aliases": "следы paw prints",
+  "category": "Животные"
+ },
+ {
+  "char": "🌸",
+  "name": "сакура",
+  "aliases": "цветок вишня blossom",
+  "category": "Природа"
+ },
+ {
+  "char": "🌹",
+  "name": "роза",
+  "aliases": "цветок rose",
+  "category": "Природа"
+ },
+ {
+  "char": "🌻",
+  "name": "подсолнух",
+  "aliases": "sunflower",
+  "category": "Природа"
+ },
+ {
+  "char": "🌷",
+  "name": "тюльпан",
+  "aliases": "tulip",
+  "category": "Природа"
+ },
+ {
+  "char": "🌼",
+  "name": "ромашка",
+  "aliases": "цветок daisy",
+  "category": "Природа"
+ },
+ {
+  "char": "💐",
+  "name": "букет",
+  "aliases": "цветы bouquet",
+  "category": "Природа"
+ },
+ {
+  "char": "🌱",
+  "name": "росток",
+  "aliases": "саженец seedling",
+  "category": "Природа"
+ },
+ {
+  "char": "🌲",
+  "name": "ёлка",
+  "aliases": "хвойное дерево evergreen",
+  "category": "Природа"
+ },
+ {
+  "char": "🌳",
+  "name": "дерево",
+  "aliases": "tree",
+  "category": "Природа"
+ },
+ {
+  "char": "🌴",
+  "name": "пальма",
+  "aliases": "palm",
+  "category": "Природа"
+ },
+ {
+  "char": "🌵",
+  "name": "кактус",
+  "aliases": "cactus",
+  "category": "Природа"
+ },
+ {
+  "char": "🍀",
+  "name": "клевер",
+  "aliases": "удача four leaf clover",
+  "category": "Природа"
+ },
+ {
+  "char": "🍁",
+  "name": "кленовый лист",
+  "aliases": "осень maple leaf",
+  "category": "Природа"
+ },
+ {
+  "char": "🍂",
+  "name": "опавшие листья",
+  "aliases": "осень fallen leaves",
+  "category": "Природа"
+ },
+ {
+  "char": "🍃",
+  "name": "листья на ветру",
+  "aliases": "leaf wind",
+  "category": "Природа"
+ },
+ {
+  "char": "🌍",
+  "name": "земля",
+  "aliases": "планета глобус earth globe",
+  "category": "Природа"
+ },
+ {
+  "char": "🌙",
+  "name": "луна",
+  "aliases": "месяц ночь moon",
+  "category": "Природа"
+ },
+ {
+  "char": "⭐",
+  "name": "звезда",
+  "aliases": "star",
+  "category": "Природа"
+ },
+ {
+  "char": "🌟",
+  "name": "сияющая звезда",
+  "aliases": "glowing star",
+  "category": "Природа"
+ },
+ {
+  "char": "✨",
+  "name": "искры",
+  "aliases": "блёстки sparkles магия",
+  "category": "Природа"
+ },
+ {
+  "char": "⚡",
+  "name": "молния",
+  "aliases": "ток заряд lightning",
+  "category": "Природа"
+ },
+ {
+  "char": "🔥",
+  "name": "огонь",
+  "aliases": "огонёк пожар жара fire топ",
+  "category": "Природа"
+ },
+ {
+  "char": "💧",
+  "name": "капля",
+  "aliases": "вода droplet",
+  "category": "Природа"
+ },
+ {
+  "char": "🌊",
+  "name": "волна",
+  "aliases": "море wave",
+  "category": "Природа"
+ },
+ {
+  "char": "☀️",
+  "name": "солнце",
+  "aliases": "ясно sun",
+  "category": "Природа"
+ },
+ {
+  "char": "🌤️",
+  "name": "солнце с облаком",
+  "aliases": "sun behind cloud",
+  "category": "Природа"
+ },
+ {
+  "char": "☁️",
+  "name": "облако",
+  "aliases": "пасмурно cloud",
+  "category": "Природа"
+ },
+ {
+  "char": "🌧️",
+  "name": "дождь",
+  "aliases": "rain",
+  "category": "Природа"
+ },
+ {
+  "char": "⛈️",
+  "name": "гроза",
+  "aliases": "thunderstorm",
+  "category": "Природа"
+ },
+ {
+  "char": "🌨️",
+  "name": "снег",
+  "aliases": "снегопад snow",
+  "category": "Природа"
+ },
+ {
+  "char": "❄️",
+  "name": "снежинка",
+  "aliases": "мороз snowflake",
+  "category": "Природа"
+ },
+ {
+  "char": "☃️",
+  "name": "снеговик",
+  "aliases": "snowman",
+  "category": "Природа"
+ },
+ {
+  "char": "🌪️",
+  "name": "торнадо",
+  "aliases": "смерч tornado",
+  "category": "Природа"
+ },
+ {
+  "char": "🌈",
+  "name": "радуга",
+  "aliases": "rainbow",
+  "category": "Природа"
+ },
+ {
+  "char": "🌡️",
+  "name": "термометр",
+  "aliases": "температура thermometer",
+  "category": "Природа"
+ },
+ {
+  "char": "🌑",
+  "name": "новолуние",
+  "aliases": "new moon",
+  "category": "Природа"
+ },
+ {
+  "char": "🌕",
+  "name": "полнолуние",
+  "aliases": "full moon",
+  "category": "Природа"
+ },
+ {
+  "char": "🍎",
+  "name": "яблоко",
+  "aliases": "apple",
+  "category": "Еда"
+ },
+ {
+  "char": "🍊",
+  "name": "апельсин",
+  "aliases": "мандарин orange",
+  "category": "Еда"
+ },
+ {
+  "char": "🍋",
+  "name": "лимон",
+  "aliases": "lemon",
+  "category": "Еда"
+ },
+ {
+  "char": "🍌",
+  "name": "банан",
+  "aliases": "banana",
+  "category": "Еда"
+ },
+ {
+  "char": "🍉",
+  "name": "арбуз",
+  "aliases": "watermelon",
+  "category": "Еда"
+ },
+ {
+  "char": "🍇",
+  "name": "виноград",
+  "aliases": "grapes",
+  "category": "Еда"
+ },
+ {
+  "char": "🍓",
+  "name": "клубника",
+  "aliases": "strawberry",
+  "category": "Еда"
+ },
+ {
+  "char": "🫐",
+  "name": "черника",
+  "aliases": "голубика blueberries",
+  "category": "Еда"
+ },
+ {
+  "char": "🍒",
+  "name": "вишня",
+  "aliases": "черешня cherries",
+  "category": "Еда"
+ },
+ {
+  "char": "🍑",
+  "name": "персик",
+  "aliases": "peach",
+  "category": "Еда"
+ },
+ {
+  "char": "🥭",
+  "name": "манго",
+  "aliases": "mango",
+  "category": "Еда"
+ },
+ {
+  "char": "🍍",
+  "name": "ананас",
+  "aliases": "pineapple",
+  "category": "Еда"
+ },
+ {
+  "char": "🥥",
+  "name": "кокос",
+  "aliases": "coconut",
+  "category": "Еда"
+ },
+ {
+  "char": "🥝",
+  "name": "киви",
+  "aliases": "kiwi",
+  "category": "Еда"
+ },
+ {
+  "char": "🍅",
+  "name": "помидор",
+  "aliases": "томат tomato",
+  "category": "Еда"
+ },
+ {
+  "char": "🥑",
+  "name": "авокадо",
+  "aliases": "avocado",
+  "category": "Еда"
+ },
+ {
+  "char": "🥦",
+  "name": "брокколи",
+  "aliases": "broccoli",
+  "category": "Еда"
+ },
+ {
+  "char": "🥕",
+  "name": "морковь",
+  "aliases": "carrot",
+  "category": "Еда"
+ },
+ {
+  "char": "🌽",
+  "name": "кукуруза",
+  "aliases": "corn",
+  "category": "Еда"
+ },
+ {
+  "char": "🌶️",
+  "name": "перец чили",
+  "aliases": "острый hot pepper",
+  "category": "Еда"
+ },
+ {
+  "char": "🥔",
+  "name": "картошка",
+  "aliases": "картофель potato",
+  "category": "Еда"
+ },
+ {
+  "char": "🍞",
+  "name": "хлеб",
+  "aliases": "батон bread",
+  "category": "Еда"
+ },
+ {
+  "char": "🥐",
+  "name": "круассан",
+  "aliases": "croissant",
+  "category": "Еда"
+ },
+ {
+  "char": "🥨",
+  "name": "крендель",
+  "aliases": "pretzel",
+  "category": "Еда"
+ },
+ {
+  "char": "🧀",
+  "name": "сыр",
+  "aliases": "cheese",
+  "category": "Еда"
+ },
+ {
+  "char": "🥚",
+  "name": "яйцо",
+  "aliases": "egg",
+  "category": "Еда"
+ },
+ {
+  "char": "🍳",
+  "name": "яичница",
+  "aliases": "жарю cooking fried egg",
+  "category": "Еда"
+ },
+ {
+  "char": "🥞",
+  "name": "блины",
+  "aliases": "панкейки pancakes",
+  "category": "Еда"
+ },
+ {
+  "char": "🥓",
+  "name": "бекон",
+  "aliases": "bacon",
+  "category": "Еда"
+ },
+ {
+  "char": "🍔",
+  "name": "бургер",
+  "aliases": "гамбургер burger",
+  "category": "Еда"
+ },
+ {
+  "char": "🍟",
+  "name": "картошка фри",
+  "aliases": "фри fries",
+  "category": "Еда"
+ },
+ {
+  "char": "🍕",
+  "name": "пицца",
+  "aliases": "pizza",
+  "category": "Еда"
+ },
+ {
+  "char": "🌭",
+  "name": "хот-дог",
+  "aliases": "hot dog",
+  "category": "Еда"
+ },
+ {
+  "char": "🌮",
+  "name": "тако",
+  "aliases": "taco",
+  "category": "Еда"
+ },
+ {
+  "char": "🌯",
+  "name": "буррито",
+  "aliases": "шаурма burrito",
+  "category": "Еда"
+ },
+ {
+  "char": "🥗",
+  "name": "салат",
+  "aliases": "salad",
+  "category": "Еда"
+ },
+ {
+  "char": "🍝",
+  "name": "паста",
+  "aliases": "спагетти spaghetti",
+  "category": "Еда"
+ },
+ {
+  "char": "🍜",
+  "name": "лапша",
+  "aliases": "рамен ramen noodles",
+  "category": "Еда"
+ },
+ {
+  "char": "🍲",
+  "name": "суп",
+  "aliases": "рагу stew",
+  "category": "Еда"
+ },
+ {
+  "char": "🍣",
+  "name": "суши",
+  "aliases": "sushi",
+  "category": "Еда"
+ },
+ {
+  "char": "🍤",
+  "name": "креветка в кляре",
+  "aliases": "темпура fried shrimp",
+  "category": "Еда"
+ },
+ {
+  "char": "🍚",
+  "name": "рис",
+  "aliases": "rice",
+  "category": "Еда"
+ },
+ {
+  "char": "🍙",
+  "name": "онигири",
+  "aliases": "rice ball",
+  "category": "Еда"
+ },
+ {
+  "char": "🥟",
+  "name": "пельмени",
+  "aliases": "вареники dumpling",
+  "category": "Еда"
+ },
+ {
+  "char": "🍦",
+  "name": "мороженое",
+  "aliases": "рожок ice cream",
+  "category": "Еда"
+ },
+ {
+  "char": "🍩",
+  "name": "пончик",
+  "aliases": "донат doughnut",
+  "category": "Еда"
+ },
+ {
+  "char": "🍪",
+  "name": "печенье",
+  "aliases": "cookie",
+  "category": "Еда"
+ },
+ {
+  "char": "🎂",
+  "name": "торт",
+  "aliases": "день рождения birthday cake",
+  "category": "Еда"
+ },
+ {
+  "char": "🍰",
+  "name": "кусок торта",
+  "aliases": "пирожное shortcake",
+  "category": "Еда"
+ },
+ {
+  "char": "🧁",
+  "name": "капкейк",
+  "aliases": "cupcake",
+  "category": "Еда"
+ },
+ {
+  "char": "🍫",
+  "name": "шоколад",
+  "aliases": "chocolate",
+  "category": "Еда"
+ },
+ {
+  "char": "🍬",
+  "name": "конфета",
+  "aliases": "candy",
+  "category": "Еда"
+ },
+ {
+  "char": "🍭",
+  "name": "леденец",
+  "aliases": "чупа lollipop",
+  "category": "Еда"
+ },
+ {
+  "char": "🍯",
+  "name": "мёд",
+  "aliases": "honey",
+  "category": "Еда"
+ },
+ {
+  "char": "☕",
+  "name": "кофе",
+  "aliases": "чай кружка coffee",
+  "category": "Еда"
+ },
+ {
+  "char": "🍵",
+  "name": "чай",
+  "aliases": "зелёный чай tea",
+  "category": "Еда"
+ },
+ {
+  "char": "🧃",
+  "name": "сок",
+  "aliases": "juice box",
+  "category": "Еда"
+ },
+ {
+  "char": "🥤",
+  "name": "стакан с трубочкой",
+  "aliases": "напиток cup straw",
+  "category": "Еда"
+ },
+ {
+  "char": "🍺",
+  "name": "пиво",
+  "aliases": "кружка beer",
+  "category": "Еда"
+ },
+ {
+  "char": "🍻",
+  "name": "чокаемся",
+  "aliases": "пиво beers",
+  "category": "Еда"
+ },
+ {
+  "char": "🥂",
+  "name": "шампанское",
+  "aliases": "тост clinking glasses",
+  "category": "Еда"
+ },
+ {
+  "char": "🍷",
+  "name": "вино",
+  "aliases": "wine",
+  "category": "Еда"
+ },
+ {
+  "char": "🥃",
+  "name": "виски",
+  "aliases": "whisky tumbler",
+  "category": "Еда"
+ },
+ {
+  "char": "🍾",
+  "name": "бутылка с пробкой",
+  "aliases": "шампанское bottle popping",
+  "category": "Еда"
+ },
+ {
+  "char": "🧊",
+  "name": "лёд",
+  "aliases": "кубик ice",
+  "category": "Еда"
+ },
+ {
+  "char": "🥛",
+  "name": "молоко",
+  "aliases": "milk",
+  "category": "Еда"
+ },
+ {
+  "char": "⚽",
+  "name": "футбол",
+  "aliases": "мяч soccer",
+  "category": "Активности"
+ },
+ {
+  "char": "🏀",
+  "name": "баскетбол",
+  "aliases": "мяч basketball",
+  "category": "Активности"
+ },
+ {
+  "char": "🏈",
+  "name": "американский футбол",
+  "aliases": "football",
+  "category": "Активности"
+ },
+ {
+  "char": "⚾",
+  "name": "бейсбол",
+  "aliases": "baseball",
+  "category": "Активности"
+ },
+ {
+  "char": "🎾",
+  "name": "теннис",
+  "aliases": "tennis",
+  "category": "Активности"
+ },
+ {
+  "char": "🏐",
+  "name": "волейбол",
+  "aliases": "volleyball",
+  "category": "Активности"
+ },
+ {
+  "char": "🏓",
+  "name": "настольный теннис",
+  "aliases": "пинг-понг ping pong",
+  "category": "Активности"
+ },
+ {
+  "char": "🏸",
+  "name": "бадминтон",
+  "aliases": "badminton",
+  "category": "Активности"
+ },
+ {
+  "char": "🥅",
+  "name": "ворота",
+  "aliases": "goal net",
+  "category": "Активности"
+ },
+ {
+  "char": "⛳",
+  "name": "гольф",
+  "aliases": "golf",
+  "category": "Активности"
+ },
+ {
+  "char": "🎯",
+  "name": "мишень",
+  "aliases": "в точку dart цель",
+  "category": "Активности"
+ },
+ {
+  "char": "🎳",
+  "name": "боулинг",
+  "aliases": "bowling",
+  "category": "Активности"
+ },
+ {
+  "char": "🎮",
+  "name": "геймпад",
+  "aliases": "игры джойстик gamepad",
+  "category": "Активности"
+ },
+ {
+  "char": "🕹️",
+  "name": "джойстик",
+  "aliases": "joystick",
+  "category": "Активности"
+ },
+ {
+  "char": "🎲",
+  "name": "кубик",
+  "aliases": "кости dice",
+  "category": "Активности"
+ },
+ {
+  "char": "♟️",
+  "name": "шахматы",
+  "aliases": "пешка chess",
+  "category": "Активности"
+ },
+ {
+  "char": "🎰",
+  "name": "автомат",
+  "aliases": "казино slot machine",
+  "category": "Активности"
+ },
+ {
+  "char": "🧩",
+  "name": "пазл",
+  "aliases": "puzzle",
+  "category": "Активности"
+ },
+ {
+  "char": "🎨",
+  "name": "палитра",
+  "aliases": "рисую art palette",
+  "category": "Активности"
+ },
+ {
+  "char": "🎭",
+  "name": "маски",
+  "aliases": "театр performing arts",
+  "category": "Активности"
+ },
+ {
+  "char": "🎤",
+  "name": "микрофон",
+  "aliases": "караоке microphone",
+  "category": "Активности"
+ },
+ {
+  "char": "🎧",
+  "name": "наушники",
+  "aliases": "headphone",
+  "category": "Активности"
+ },
+ {
+  "char": "🎵",
+  "name": "нота",
+  "aliases": "музыка music note",
+  "category": "Активности"
+ },
+ {
+  "char": "🎶",
+  "name": "ноты",
+  "aliases": "музыка music notes",
+  "category": "Активности"
+ },
+ {
+  "char": "🎸",
+  "name": "гитара",
+  "aliases": "guitar",
+  "category": "Активности"
+ },
+ {
+  "char": "🎹",
+  "name": "пианино",
+  "aliases": "клавиши keyboard piano",
+  "category": "Активности"
+ },
+ {
+  "char": "🥁",
+  "name": "барабан",
+  "aliases": "drum",
+  "category": "Активности"
+ },
+ {
+  "char": "🎺",
+  "name": "труба",
+  "aliases": "trumpet",
+  "category": "Активности"
+ },
+ {
+  "char": "🎬",
+  "name": "хлопушка",
+  "aliases": "кино фильм clapper movie",
+  "category": "Активности"
+ },
+ {
+  "char": "🎥",
+  "name": "кинокамера",
+  "aliases": "movie camera",
+  "category": "Активности"
+ },
+ {
+  "char": "📷",
+  "name": "фотоаппарат",
+  "aliases": "камера camera фото",
+  "category": "Активности"
+ },
+ {
+  "char": "📸",
+  "name": "фото со вспышкой",
+  "aliases": "камера camera flash",
+  "category": "Активности"
+ },
+ {
+  "char": "🏆",
+  "name": "кубок",
+  "aliases": "победа trophy",
+  "category": "Активности"
+ },
+ {
+  "char": "🥇",
+  "name": "золото",
+  "aliases": "первое место gold medal",
+  "category": "Активности"
+ },
+ {
+  "char": "🥈",
+  "name": "серебро",
+  "aliases": "второе место silver medal",
+  "category": "Активности"
+ },
+ {
+  "char": "🥉",
+  "name": "бронза",
+  "aliases": "третье место bronze medal",
+  "category": "Активности"
+ },
+ {
+  "char": "🎉",
+  "name": "хлопушка",
+  "aliases": "праздник ура party popper",
+  "category": "Активности"
+ },
+ {
+  "char": "🎊",
+  "name": "конфетти",
+  "aliases": "праздник confetti",
+  "category": "Активности"
+ },
+ {
+  "char": "🎁",
+  "name": "подарок",
+  "aliases": "gift present",
+  "category": "Активности"
+ },
+ {
+  "char": "🎈",
+  "name": "шарик",
+  "aliases": "воздушный balloon",
+  "category": "Активности"
+ },
+ {
+  "char": "🚀",
+  "name": "ракета",
+  "aliases": "запуск взлёт rocket релиз",
+  "category": "Активности"
+ },
+ {
+  "char": "🚗",
+  "name": "машина",
+  "aliases": "авто car",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🚕",
+  "name": "такси",
+  "aliases": "taxi",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🚌",
+  "name": "автобус",
+  "aliases": "bus",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🚑",
+  "name": "скорая",
+  "aliases": "ambulance",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🚒",
+  "name": "пожарная",
+  "aliases": "fire engine",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🚓",
+  "name": "полиция",
+  "aliases": "police car",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🏎️",
+  "name": "гоночная",
+  "aliases": "racing car",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🛵",
+  "name": "скутер",
+  "aliases": "мопед scooter",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🏍️",
+  "name": "мотоцикл",
+  "aliases": "motorcycle",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🚲",
+  "name": "велосипед",
+  "aliases": "bicycle",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🛴",
+  "name": "самокат",
+  "aliases": "kick scooter",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🚂",
+  "name": "поезд",
+  "aliases": "паровоз train",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🚇",
+  "name": "метро",
+  "aliases": "metro subway",
+  "category": "Транспорт"
+ },
+ {
+  "char": "✈️",
+  "name": "самолёт",
+  "aliases": "airplane",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🛸",
+  "name": "нло",
+  "aliases": "тарелка ufo",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🚁",
+  "name": "вертолёт",
+  "aliases": "helicopter",
+  "category": "Транспорт"
+ },
+ {
+  "char": "⛵",
+  "name": "парусник",
+  "aliases": "лодка sailboat",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🚢",
+  "name": "корабль",
+  "aliases": "ship",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🏠",
+  "name": "дом",
+  "aliases": "house home",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🏢",
+  "name": "офис",
+  "aliases": "здание office building",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🏥",
+  "name": "больница",
+  "aliases": "hospital",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🏦",
+  "name": "банк",
+  "aliases": "bank",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🏫",
+  "name": "школа",
+  "aliases": "school",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🗼",
+  "name": "башня",
+  "aliases": "tower",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🌉",
+  "name": "мост",
+  "aliases": "bridge",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🗺️",
+  "name": "карта",
+  "aliases": "map",
+  "category": "Транспорт"
+ },
+ {
+  "char": "📍",
+  "name": "метка",
+  "aliases": "точка на карте pin location",
+  "category": "Транспорт"
+ },
+ {
+  "char": "🧭",
+  "name": "компас",
+  "aliases": "compass",
+  "category": "Транспорт"
+ },
+ {
+  "char": "💻",
+  "name": "ноутбук",
+  "aliases": "комп laptop",
+  "category": "Предметы"
+ },
+ {
+  "char": "🖥️",
+  "name": "монитор",
+  "aliases": "компьютер desktop",
+  "category": "Предметы"
+ },
+ {
+  "char": "⌨️",
+  "name": "клавиатура",
+  "aliases": "keyboard",
+  "category": "Предметы"
+ },
+ {
+  "char": "🖱️",
+  "name": "мышь компьютерная",
+  "aliases": "computer mouse",
+  "category": "Предметы"
+ },
+ {
+  "char": "🖨️",
+  "name": "принтер",
+  "aliases": "printer",
+  "category": "Предметы"
+ },
+ {
+  "char": "💾",
+  "name": "дискета",
+  "aliases": "сохранить floppy save",
+  "category": "Предметы"
+ },
+ {
+  "char": "💿",
+  "name": "диск",
+  "aliases": "cd",
+  "category": "Предметы"
+ },
+ {
+  "char": "📀",
+  "name": "dvd",
+  "aliases": "диск",
+  "category": "Предметы"
+ },
+ {
+  "char": "💽",
+  "name": "минидиск",
+  "aliases": "minidisc",
+  "category": "Предметы"
+ },
+ {
+  "char": "📱",
+  "name": "телефон",
+  "aliases": "смартфон mobile phone",
+  "category": "Предметы"
+ },
+ {
+  "char": "☎️",
+  "name": "телефон стационарный",
+  "aliases": "trrr telephone",
+  "category": "Предметы"
+ },
+ {
+  "char": "📞",
+  "name": "трубка",
+  "aliases": "звонок telephone receiver",
+  "category": "Предметы"
+ },
+ {
+  "char": "📟",
+  "name": "пейджер",
+  "aliases": "pager",
+  "category": "Предметы"
+ },
+ {
+  "char": "📺",
+  "name": "телевизор",
+  "aliases": "тв television",
+  "category": "Предметы"
+ },
+ {
+  "char": "📻",
+  "name": "радио",
+  "aliases": "radio",
+  "category": "Предметы"
+ },
+ {
+  "char": "🔋",
+  "name": "батарея",
+  "aliases": "заряд battery",
+  "category": "Предметы"
+ },
+ {
+  "char": "🪫",
+  "name": "разряжено",
+  "aliases": "низкий заряд low battery",
+  "category": "Предметы"
+ },
+ {
+  "char": "🔌",
+  "name": "вилка",
+  "aliases": "розетка plug",
+  "category": "Предметы"
+ },
+ {
+  "char": "💡",
+  "name": "лампочка",
+  "aliases": "идея idea bulb",
+  "category": "Предметы"
+ },
+ {
+  "char": "🔦",
+  "name": "фонарик",
+  "aliases": "flashlight",
+  "category": "Предметы"
+ },
+ {
+  "char": "🕯️",
+  "name": "свеча",
+  "aliases": "candle",
+  "category": "Предметы"
+ },
+ {
+  "char": "🔍",
+  "name": "лупа",
+  "aliases": "поиск search magnifying",
+  "category": "Предметы"
+ },
+ {
+  "char": "🔎",
+  "name": "лупа вправо",
+  "aliases": "поиск search",
+  "category": "Предметы"
+ },
+ {
+  "char": "🔒",
+  "name": "замок закрыт",
+  "aliases": "заблокировано lock",
+  "category": "Предметы"
+ },
+ {
+  "char": "🔓",
+  "name": "замок открыт",
+  "aliases": "разблокировано unlock",
+  "category": "Предметы"
+ },
+ {
+  "char": "🔑",
+  "name": "ключ",
+  "aliases": "key",
+  "category": "Предметы"
+ },
+ {
+  "char": "🗝️",
+  "name": "старый ключ",
+  "aliases": "old key",
+  "category": "Предметы"
+ },
+ {
+  "char": "🔨",
+  "name": "молоток",
+  "aliases": "hammer",
+  "category": "Предметы"
+ },
+ {
+  "char": "🪓",
+  "name": "топор",
+  "aliases": "axe",
+  "category": "Предметы"
+ },
+ {
+  "char": "🔧",
+  "name": "гаечный ключ",
+  "aliases": "wrench починить",
+  "category": "Предметы"
+ },
+ {
+  "char": "🔩",
+  "name": "болт",
+  "aliases": "гайка nut bolt",
+  "category": "Предметы"
+ },
+ {
+  "char": "⚙️",
+  "name": "шестерёнка",
+  "aliases": "настройки gear настроить",
+  "category": "Предметы"
+ },
+ {
+  "char": "🧰",
+  "name": "ящик с инструментами",
+  "aliases": "toolbox",
+  "category": "Предметы"
+ },
+ {
+  "char": "🧲",
+  "name": "магнит",
+  "aliases": "magnet",
+  "category": "Предметы"
+ },
+ {
+  "char": "🧪",
+  "name": "пробирка",
+  "aliases": "тест test tube",
+  "category": "Предметы"
+ },
+ {
+  "char": "🧬",
+  "name": "днк",
+  "aliases": "dna генетика",
+  "category": "Предметы"
+ },
+ {
+  "char": "🔬",
+  "name": "микроскоп",
+  "aliases": "microscope",
+  "category": "Предметы"
+ },
+ {
+  "char": "🔭",
+  "name": "телескоп",
+  "aliases": "telescope",
+  "category": "Предметы"
+ },
+ {
+  "char": "📡",
+  "name": "антенна",
+  "aliases": "спутник satellite",
+  "category": "Предметы"
+ },
+ {
+  "char": "💉",
+  "name": "шприц",
+  "aliases": "укол syringe",
+  "category": "Предметы"
+ },
+ {
+  "char": "💊",
+  "name": "таблетка",
+  "aliases": "pill",
+  "category": "Предметы"
+ },
+ {
+  "char": "🩹",
+  "name": "пластырь",
+  "aliases": "bandage",
+  "category": "Предметы"
+ },
+ {
+  "char": "🚪",
+  "name": "дверь",
+  "aliases": "door",
+  "category": "Предметы"
+ },
+ {
+  "char": "🪑",
+  "name": "стул",
+  "aliases": "chair",
+  "category": "Предметы"
+ },
+ {
+  "char": "🛏️",
+  "name": "кровать",
+  "aliases": "bed",
+  "category": "Предметы"
+ },
+ {
+  "char": "🚿",
+  "name": "душ",
+  "aliases": "shower",
+  "category": "Предметы"
+ },
+ {
+  "char": "🧹",
+  "name": "метла",
+  "aliases": "уборка broom",
+  "category": "Предметы"
+ },
+ {
+  "char": "🧺",
+  "name": "корзина",
+  "aliases": "basket",
+  "category": "Предметы"
+ },
+ {
+  "char": "🗑️",
+  "name": "корзина мусорная",
+  "aliases": "удалить trash delete",
+  "category": "Предметы"
+ },
+ {
+  "char": "📦",
+  "name": "коробка",
+  "aliases": "посылка package box",
+  "category": "Предметы"
+ },
+ {
+  "char": "📫",
+  "name": "почтовый ящик",
+  "aliases": "mailbox",
+  "category": "Предметы"
+ },
+ {
+  "char": "✉️",
+  "name": "конверт",
+  "aliases": "письмо почта envelope mail",
+  "category": "Предметы"
+ },
+ {
+  "char": "📧",
+  "name": "имейл",
+  "aliases": "почта email",
+  "category": "Предметы"
+ },
+ {
+  "char": "📨",
+  "name": "входящее письмо",
+  "aliases": "incoming envelope",
+  "category": "Предметы"
+ },
+ {
+  "char": "📤",
+  "name": "исходящие",
+  "aliases": "отправить outbox",
+  "category": "Предметы"
+ },
+ {
+  "char": "📥",
+  "name": "входящие",
+  "aliases": "получить inbox",
+  "category": "Предметы"
+ },
+ {
+  "char": "📎",
+  "name": "скрепка",
+  "aliases": "вложение paperclip attach",
+  "category": "Предметы"
+ },
+ {
+  "char": "✂️",
+  "name": "ножницы",
+  "aliases": "вырезать scissors cut",
+  "category": "Предметы"
+ },
+ {
+  "char": "📌",
+  "name": "кнопка",
+  "aliases": "прикрепить pushpin",
+  "category": "Предметы"
+ },
+ {
+  "char": "📏",
+  "name": "линейка",
+  "aliases": "ruler",
+  "category": "Предметы"
+ },
+ {
+  "char": "📐",
+  "name": "угольник",
+  "aliases": "triangular ruler",
+  "category": "Предметы"
+ },
+ {
+  "char": "📚",
+  "name": "книги",
+  "aliases": "учёба books",
+  "category": "Предметы"
+ },
+ {
+  "char": "📖",
+  "name": "открытая книга",
+  "aliases": "чтение open book",
+  "category": "Предметы"
+ },
+ {
+  "char": "📝",
+  "name": "заметка",
+  "aliases": "записать memo note",
+  "category": "Предметы"
+ },
+ {
+  "char": "📄",
+  "name": "документ",
+  "aliases": "лист page document",
+  "category": "Предметы"
+ },
+ {
+  "char": "📁",
+  "name": "папка",
+  "aliases": "folder",
+  "category": "Предметы"
+ },
+ {
+  "char": "📂",
+  "name": "открытая папка",
+  "aliases": "open folder",
+  "category": "Предметы"
+ },
+ {
+  "char": "🗂️",
+  "name": "разделители",
+  "aliases": "картотека card index",
+  "category": "Предметы"
+ },
+ {
+  "char": "📋",
+  "name": "буфер обмена",
+  "aliases": "clipboard планшет",
+  "category": "Предметы"
+ },
+ {
+  "char": "📊",
+  "name": "график",
+  "aliases": "столбцы bar chart диаграмма",
+  "category": "Предметы"
+ },
+ {
+  "char": "📈",
+  "name": "рост",
+  "aliases": "график вверх chart increasing",
+  "category": "Предметы"
+ },
+ {
+  "char": "📉",
+  "name": "падение",
+  "aliases": "график вниз chart decreasing",
+  "category": "Предметы"
+ },
+ {
+  "char": "🗓️",
+  "name": "календарь",
+  "aliases": "calendar",
+  "category": "Предметы"
+ },
+ {
+  "char": "⏰",
+  "name": "будильник",
+  "aliases": "alarm clock",
+  "category": "Предметы"
+ },
+ {
+  "char": "⏳",
+  "name": "песочные часы",
+  "aliases": "ждём hourglass",
+  "category": "Предметы"
+ },
+ {
+  "char": "⌛",
+  "name": "время вышло",
+  "aliases": "hourglass done",
+  "category": "Предметы"
+ },
+ {
+  "char": "⏱️",
+  "name": "секундомер",
+  "aliases": "stopwatch",
+  "category": "Предметы"
+ },
+ {
+  "char": "🕐",
+  "name": "часы",
+  "aliases": "время clock",
+  "category": "Предметы"
+ },
+ {
+  "char": "💰",
+  "name": "мешок денег",
+  "aliases": "money bag",
+  "category": "Предметы"
+ },
+ {
+  "char": "💵",
+  "name": "доллары",
+  "aliases": "деньги dollar money",
+  "category": "Предметы"
+ },
+ {
+  "char": "💳",
+  "name": "карта банковская",
+  "aliases": "credit card",
+  "category": "Предметы"
+ },
+ {
+  "char": "🪙",
+  "name": "монета",
+  "aliases": "coin",
+  "category": "Предметы"
+ },
+ {
+  "char": "💎",
+  "name": "алмаз",
+  "aliases": "бриллиант gem diamond",
+  "category": "Предметы"
+ },
+ {
+  "char": "👑",
+  "name": "корона",
+  "aliases": "король crown",
+  "category": "Предметы"
+ },
+ {
+  "char": "🎩",
+  "name": "цилиндр",
+  "aliases": "шляпа top hat",
+  "category": "Предметы"
+ },
+ {
+  "char": "👓",
+  "name": "очки",
+  "aliases": "glasses",
+  "category": "Предметы"
+ },
+ {
+  "char": "🕶️",
+  "name": "тёмные очки",
+  "aliases": "sunglasses",
+  "category": "Предметы"
+ },
+ {
+  "char": "👕",
+  "name": "футболка",
+  "aliases": "t-shirt",
+  "category": "Предметы"
+ },
+ {
+  "char": "👖",
+  "name": "джинсы",
+  "aliases": "штаны jeans",
+  "category": "Предметы"
+ },
+ {
+  "char": "👟",
+  "name": "кроссовки",
+  "aliases": "обувь sneaker",
+  "category": "Предметы"
+ },
+ {
+  "char": "🎒",
+  "name": "рюкзак",
+  "aliases": "backpack",
+  "category": "Предметы"
+ },
+ {
+  "char": "☂️",
+  "name": "зонт",
+  "aliases": "umbrella",
+  "category": "Предметы"
+ },
+ {
+  "char": "🧸",
+  "name": "мишка",
+  "aliases": "игрушка teddy bear",
+  "category": "Предметы"
+ },
+ {
+  "char": "✅",
+  "name": "галочка",
+  "aliases": "готово ок check done выполнено",
+  "category": "Символы"
+ },
+ {
+  "char": "☑️",
+  "name": "галочка в квадрате",
+  "aliases": "отмечено ballot check",
+  "category": "Символы"
+ },
+ {
+  "char": "✔️",
+  "name": "жирная галочка",
+  "aliases": "check mark",
+  "category": "Символы"
+ },
+ {
+  "char": "❌",
+  "name": "крестик",
+  "aliases": "нет ошибка cross x",
+  "category": "Символы"
+ },
+ {
+  "char": "❎",
+  "name": "крестик в квадрате",
+  "aliases": "cross mark button",
+  "category": "Символы"
+ },
+ {
+  "char": "⭕",
+  "name": "круг",
+  "aliases": "верно heavy circle",
+  "category": "Символы"
+ },
+ {
+  "char": "🚫",
+  "name": "запрещено",
+  "aliases": "нельзя prohibited",
+  "category": "Символы"
+ },
+ {
+  "char": "⛔",
+  "name": "въезд запрещён",
+  "aliases": "стоп no entry",
+  "category": "Символы"
+ },
+ {
+  "char": "⚠️",
+  "name": "внимание",
+  "aliases": "предупреждение warning осторожно",
+  "category": "Символы"
+ },
+ {
+  "char": "🚸",
+  "name": "осторожно дети",
+  "aliases": "children crossing",
+  "category": "Символы"
+ },
+ {
+  "char": "❗",
+  "name": "восклицательный знак",
+  "aliases": "важно exclamation",
+  "category": "Символы"
+ },
+ {
+  "char": "❓",
+  "name": "вопрос",
+  "aliases": "question",
+  "category": "Символы"
+ },
+ {
+  "char": "❕",
+  "name": "белый восклицательный",
+  "aliases": "exclamation",
+  "category": "Символы"
+ },
+ {
+  "char": "❔",
+  "name": "белый вопрос",
+  "aliases": "question",
+  "category": "Символы"
+ },
+ {
+  "char": "💲",
+  "name": "доллар",
+  "aliases": "dollar sign",
+  "category": "Символы"
+ },
+ {
+  "char": "➕",
+  "name": "плюс",
+  "aliases": "добавить plus add",
+  "category": "Символы"
+ },
+ {
+  "char": "➖",
+  "name": "минус",
+  "aliases": "убрать minus",
+  "category": "Символы"
+ },
+ {
+  "char": "➗",
+  "name": "делить",
+  "aliases": "divide",
+  "category": "Символы"
+ },
+ {
+  "char": "✖️",
+  "name": "умножить",
+  "aliases": "multiply",
+  "category": "Символы"
+ },
+ {
+  "char": "♾️",
+  "name": "бесконечность",
+  "aliases": "infinity",
+  "category": "Символы"
+ },
+ {
+  "char": "🔁",
+  "name": "повтор",
+  "aliases": "зациклить repeat loop",
+  "category": "Символы"
+ },
+ {
+  "char": "🔂",
+  "name": "повтор одного",
+  "aliases": "repeat one",
+  "category": "Символы"
+ },
+ {
+  "char": "🔀",
+  "name": "перемешать",
+  "aliases": "shuffle случайно",
+  "category": "Символы"
+ },
+ {
+  "char": "▶️",
+  "name": "играть",
+  "aliases": "плей play",
+  "category": "Символы"
+ },
+ {
+  "char": "⏸️",
+  "name": "пауза",
+  "aliases": "pause",
+  "category": "Символы"
+ },
+ {
+  "char": "⏹️",
+  "name": "стоп",
+  "aliases": "stop",
+  "category": "Символы"
+ },
+ {
+  "char": "⏺️",
+  "name": "запись",
+  "aliases": "record",
+  "category": "Символы"
+ },
+ {
+  "char": "⏭️",
+  "name": "вперёд",
+  "aliases": "следующий next track",
+  "category": "Символы"
+ },
+ {
+  "char": "⏮️",
+  "name": "назад трек",
+  "aliases": "предыдущий previous track",
+  "category": "Символы"
+ },
+ {
+  "char": "⏩",
+  "name": "перемотка вперёд",
+  "aliases": "fast forward",
+  "category": "Символы"
+ },
+ {
+  "char": "⏪",
+  "name": "перемотка назад",
+  "aliases": "rewind",
+  "category": "Символы"
+ },
+ {
+  "char": "🔼",
+  "name": "вверх",
+  "aliases": "up button",
+  "category": "Символы"
+ },
+ {
+  "char": "🔽",
+  "name": "вниз",
+  "aliases": "down button",
+  "category": "Символы"
+ },
+ {
+  "char": "⬆️",
+  "name": "стрелка вверх",
+  "aliases": "up arrow",
+  "category": "Символы"
+ },
+ {
+  "char": "⬇️",
+  "name": "стрелка вниз",
+  "aliases": "down arrow",
+  "category": "Символы"
+ },
+ {
+  "char": "⬅️",
+  "name": "стрелка влево",
+  "aliases": "left arrow",
+  "category": "Символы"
+ },
+ {
+  "char": "➡️",
+  "name": "стрелка вправо",
+  "aliases": "right arrow",
+  "category": "Символы"
+ },
+ {
+  "char": "↗️",
+  "name": "стрелка вверх-вправо",
+  "aliases": "up right arrow",
+  "category": "Символы"
+ },
+ {
+  "char": "↘️",
+  "name": "стрелка вниз-вправо",
+  "aliases": "down right arrow",
+  "category": "Символы"
+ },
+ {
+  "char": "🔄",
+  "name": "обновить",
+  "aliases": "перезагрузить refresh sync",
+  "category": "Символы"
+ },
+ {
+  "char": "🔃",
+  "name": "циклические стрелки",
+  "aliases": "clockwise vertical",
+  "category": "Символы"
+ },
+ {
+  "char": "🔔",
+  "name": "колокольчик",
+  "aliases": "уведомление bell",
+  "category": "Символы"
+ },
+ {
+  "char": "🔕",
+  "name": "без звука",
+  "aliases": "тихо bell slash muted",
+  "category": "Символы"
+ },
+ {
+  "char": "📢",
+  "name": "громкоговоритель",
+  "aliases": "объявление loudspeaker",
+  "category": "Символы"
+ },
+ {
+  "char": "📣",
+  "name": "мегафон",
+  "aliases": "megaphone",
+  "category": "Символы"
+ },
+ {
+  "char": "🔇",
+  "name": "звук выключен",
+  "aliases": "муте muted",
+  "category": "Символы"
+ },
+ {
+  "char": "🔊",
+  "name": "громко",
+  "aliases": "звук speaker loud",
+  "category": "Символы"
+ },
+ {
+  "char": "♻️",
+  "name": "переработка",
+  "aliases": "recycle эко",
+  "category": "Символы"
+ },
+ {
+  "char": "⚜️",
+  "name": "лилия",
+  "aliases": "fleur de lis",
+  "category": "Символы"
+ },
+ {
+  "char": "🔰",
+  "name": "новичок",
+  "aliases": "beginner",
+  "category": "Символы"
+ },
+ {
+  "char": "⚕️",
+  "name": "медицина",
+  "aliases": "medical",
+  "category": "Символы"
+ },
+ {
+  "char": "☢️",
+  "name": "радиация",
+  "aliases": "radioactive",
+  "category": "Символы"
+ },
+ {
+  "char": "☣️",
+  "name": "биологическая опасность",
+  "aliases": "biohazard",
+  "category": "Символы"
+ },
+ {
+  "char": "🆗",
+  "name": "ок кнопка",
+  "aliases": "ok button",
+  "category": "Символы"
+ },
+ {
+  "char": "🆕",
+  "name": "новое",
+  "aliases": "new button",
+  "category": "Символы"
+ },
+ {
+  "char": "🆓",
+  "name": "бесплатно",
+  "aliases": "free button",
+  "category": "Символы"
+ },
+ {
+  "char": "🔝",
+  "name": "наверх",
+  "aliases": "top arrow",
+  "category": "Символы"
+ },
+ {
+  "char": "🔴",
+  "name": "красный круг",
+  "aliases": "red circle",
+  "category": "Символы"
+ },
+ {
+  "char": "🟠",
+  "name": "оранжевый круг",
+  "aliases": "orange circle",
+  "category": "Символы"
+ },
+ {
+  "char": "🟡",
+  "name": "жёлтый круг",
+  "aliases": "yellow circle",
+  "category": "Символы"
+ },
+ {
+  "char": "🟢",
+  "name": "зелёный круг",
+  "aliases": "green circle ок",
+  "category": "Символы"
+ },
+ {
+  "char": "🔵",
+  "name": "синий круг",
+  "aliases": "blue circle",
+  "category": "Символы"
+ },
+ {
+  "char": "🟣",
+  "name": "фиолетовый круг",
+  "aliases": "purple circle",
+  "category": "Символы"
+ },
+ {
+  "char": "⚫",
+  "name": "чёрный круг",
+  "aliases": "black circle",
+  "category": "Символы"
+ },
+ {
+  "char": "⚪",
+  "name": "белый круг",
+  "aliases": "white circle",
+  "category": "Символы"
+ },
+ {
+  "char": "🟥",
+  "name": "красный квадрат",
+  "aliases": "red square",
+  "category": "Символы"
+ },
+ {
+  "char": "🟩",
+  "name": "зелёный квадрат",
+  "aliases": "green square",
+  "category": "Символы"
+ },
+ {
+  "char": "🟦",
+  "name": "синий квадрат",
+  "aliases": "blue square",
+  "category": "Символы"
+ },
+ {
+  "char": "⬛",
+  "name": "чёрный квадрат",
+  "aliases": "black square",
+  "category": "Символы"
+ },
+ {
+  "char": "⬜",
+  "name": "белый квадрат",
+  "aliases": "white square",
+  "category": "Символы"
+ },
+ {
+  "char": "🔶",
+  "name": "оранжевый ромб",
+  "aliases": "diamond",
+  "category": "Символы"
+ },
+ {
+  "char": "🔺",
+  "name": "красный треугольник",
+  "aliases": "triangle up",
+  "category": "Символы"
+ },
+ {
+  "char": "🔻",
+  "name": "треугольник вниз",
+  "aliases": "triangle down",
+  "category": "Символы"
+ },
+ {
+  "char": "♠️",
+  "name": "пики",
+  "aliases": "карты spades",
+  "category": "Символы"
+ },
+ {
+  "char": "♥️",
+  "name": "черви",
+  "aliases": "карты hearts",
+  "category": "Символы"
+ },
+ {
+  "char": "♦️",
+  "name": "бубны",
+  "aliases": "карты diamonds",
+  "category": "Символы"
+ },
+ {
+  "char": "♣️",
+  "name": "трефы",
+  "aliases": "карты clubs",
+  "category": "Символы"
+ },
+ {
+  "char": "™️",
+  "name": "торговая марка",
+  "aliases": "trademark",
+  "category": "Символы"
+ },
+ {
+  "char": "©️",
+  "name": "копирайт",
+  "aliases": "copyright",
+  "category": "Символы"
+ },
+ {
+  "char": "®️",
+  "name": "зарегистрировано",
+  "aliases": "registered",
+  "category": "Символы"
+ }
+]

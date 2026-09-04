@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# install.sh — install the rofi launcher.
+# install.sh — install the rofi hub.
 #
 # Everything goes under your home directory; nothing needs root.
 #
@@ -30,8 +30,10 @@ done
 SRC_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
 DATA_HOME="${PREFIX}${XDG_DATA_HOME:-$HOME/.local/share}"
 CONFIG_HOME="${PREFIX}${XDG_CONFIG_HOME:-$HOME/.config}"
+CACHE_HOME="${PREFIX}${XDG_CACHE_HOME:-$HOME/.cache}"
 APP_DIR="${DATA_HOME}/rofi-launcher"
 CFG_DIR="${CONFIG_HOME}/rofi-launcher"
+PREVIEW_DIR="${CACHE_HOME}/rofi-launcher/anim-previews"
 
 run() { if (( DRY )); then printf '   would run: %s\n' "$*"; else "$@"; fi; }
 
@@ -43,13 +45,34 @@ if [[ -z "$PREFIX" ]]; then
     command -v python3 >/dev/null || die "python3 is not installed"
     ok "rofi $(rofi -version 2>/dev/null | head -1 | grep -oE '[0-9]+\.[0-9]+' | head -1) and python3 present"
     command -v gio >/dev/null || warn "gio not found (glib2) — launching falls back to parsing Exec by hand"
+    command -v cliphist >/dev/null || warn "cliphist not found — the clipboard section will say so"
+    command -v hyprctl >/dev/null || warn "hyprctl not found — the windows and animations sections need it"
+    python3 -c 'import PIL' 2>/dev/null || warn "python-pillow not found — animation previews cannot be drawn"
 fi
 
-say "Installing the launcher"
-run install -d -m 755 "$APP_DIR"
-run install -m 755 "${SRC_DIR}/rofi_launcher/launcher.py" "${APP_DIR}/launcher.py"
-run install -m 755 "${SRC_DIR}/launch.sh" "${APP_DIR}/launch.sh"
-run install -m 644 "${SRC_DIR}/themes/monochrome.rasi" "${APP_DIR}/monochrome.rasi"
+say "Installing the hub"
+run install -d -m 755 "$APP_DIR" "$APP_DIR/rofi_hub" "$APP_DIR/rofi_hub/sections" \
+    "$APP_DIR/bin" "$APP_DIR/themes" "$APP_DIR/data" "$APP_DIR/data/presets" \
+    "$APP_DIR/tools"
+
+for f in "${SRC_DIR}"/rofi_hub/*.py; do
+    run install -m 644 "$f" "$APP_DIR/rofi_hub/$(basename "$f")"
+done
+run chmod 755 "$APP_DIR/rofi_hub/hub.py" "$APP_DIR/rofi_hub/anim_mode.py"
+for f in "${SRC_DIR}"/rofi_hub/sections/*.py; do
+    run install -m 644 "$f" "$APP_DIR/rofi_hub/sections/$(basename "$f")"
+done
+for f in "${SRC_DIR}"/bin/*.sh; do
+    run install -m 755 "$f" "$APP_DIR/bin/$(basename "$f")"
+done
+for f in "${SRC_DIR}"/themes/*.rasi; do
+    run install -m 644 "$f" "$APP_DIR/themes/$(basename "$f")"
+done
+run install -m 644 "${SRC_DIR}/data/emoji.ru.json" "$APP_DIR/data/emoji.ru.json"
+for f in "${SRC_DIR}"/data/presets/*.json; do
+    run install -m 644 "$f" "$APP_DIR/data/presets/$(basename "$f")"
+done
+run install -m 755 "${SRC_DIR}/tools/render_preview.py" "$APP_DIR/tools/render_preview.py"
 ok "installed to ${APP_DIR}"
 
 say "Setting up configuration"
@@ -74,19 +97,50 @@ else
     ok "favorites.list created empty"
 fi
 
+say "Drawing the animation previews"
+if (( DRY )); then
+    printf '   would render previews into %s\n' "$PREVIEW_DIR"
+elif python3 -c 'import PIL' 2>/dev/null; then
+    run install -d -m 755 "$PREVIEW_DIR"
+    python3 "${SRC_DIR}/tools/render_preview.py" --out "$PREVIEW_DIR" >/dev/null
+    ok "previews in ${PREVIEW_DIR}"
+else
+    warn "skipped — python-pillow is not installed (the grid falls back to plain rows)"
+fi
+
 if [[ -n "$PREFIX" ]]; then
     echo; ok "Sandbox install finished: ${PREFIX}"
     exit 0
 fi
 
+# The emoji section renders through rofi's own font. The fontconfig rules that
+# ship on most systems only attach Noto Color Emoji to the generic families, so
+# an explicit family — which is what a launcher theme normally sets — gets Font
+# Awesome's monochrome glyphs or tofu instead of emoji.
+say "Checking that emoji can render"
+if fc-match "JetBrainsMono Nerd Font:charset=1F525" 2>/dev/null | grep -qi "emoji"; then
+    ok "emoji fall back to a colour emoji font"
+else
+    warn "emoji may render as monochrome icons or blank boxes"
+    warn "add a rule for your rofi font to ~/.config/fontconfig/fonts.conf:"
+    cat <<'XML'
+      <match target="pattern">
+        <test name="family"><string>JetBrainsMono Nerd Font</string></test>
+        <edit name="family" mode="append" binding="weak"><string>Noto Color Emoji</string></edit>
+      </match>
+XML
+fi
+
 echo
 ok "Installation finished."
 echo
-echo "  Try it now:   ${APP_DIR}/launch.sh"
+echo "  Try it now:   ${APP_DIR}/bin/hub.sh"
 echo
-echo "  Bind it (Hyprland — replace your existing SUPER, R binding):"
-echo "    \$menu = ${APP_DIR}/launch.sh"
+echo "  Bind it (Hyprland):"
+echo "    \$menu = ${APP_DIR}/bin/hub.sh"
 echo "    bind = SUPER, R, exec, \$menu"
+echo "    bind = CTRL, J, exec, ${APP_DIR}/bin/hub-clipboard.sh"
+echo "    bind = SUPER SHIFT, W, exec, ${APP_DIR}/bin/hub-wallpaper.sh"
 echo
-echo "  Sway / i3:"
-echo "    bindsym \$mod+r exec ${APP_DIR}/launch.sh"
+echo "  The live animation preview needs a floating test window:"
+echo "    windowrule = match:class ^(anim-preview)\$, float true, size 600 400, center true"

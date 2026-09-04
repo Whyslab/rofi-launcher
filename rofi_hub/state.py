@@ -10,14 +10,12 @@ through an environment variable and back through _clean(), so it must survive
 having no newlines, no NUL and no US in it — a JSON blob with user-supplied
 folder names in it would be one escaping bug away from breaking navigation.
 
-    ""                → root
-    "apps:Development" → inside an application folder
-    "clip"            → clipboard
-    "win"             → windows
-    "emoji"           → emoji
-    "shot"            → screenshot
-    "power"           → power
-    "power!poweroff"  → power, confirming one irreversible action
+    ""                 → the hub menu
+    "apps"             → applications, pinned entries only
+    "apps*"            → applications, every one of them (Tab toggles)
+    "apps:Development" → inside a folder
+    "clip"             → clipboard
+    "emoji"            → emoji
 
 The folder name is the only free-form part and it always comes last, so a
 folder called "Media: everything" survives the round trip intact.
@@ -27,23 +25,25 @@ from __future__ import annotations
 ROOT = ""
 APPS = "apps"
 CLIPBOARD = "clip"
-WINDOWS = "win"
 EMOJI = "emoji"
-SCREENSHOT = "shot"
-POWER = "power"
 
-SECTION_LEVELS = (CLIPBOARD, WINDOWS, EMOJI, SCREENSHOT, POWER)
+# Sections drawn inside this rofi session. Wallpaper and animations are not
+# here: they need a grid with large thumbnails, and rofi cannot restyle itself
+# mid-session, so they open a window of their own.
+SECTION_LEVELS = (APPS, CLIPBOARD, EMOJI)
+
+ALL_APPS = "*"   # the marker that means "not just the pinned ones"
 
 
 def parse(data):
-    """ROFI_DATA → (level, argument). An unknown value degrades to the root."""
+    """ROFI_DATA → (level, argument). An unknown value degrades to the hub."""
     data = (data or "").strip()
     if not data:
         return ROOT, ""
+    if data == APPS + ALL_APPS:
+        return APPS, ALL_APPS
     if data.startswith(APPS + ":"):
         return APPS, data[len(APPS) + 1:]
-    if data.startswith(POWER + "!"):
-        return POWER, data[len(POWER) + 1:]
     if data in SECTION_LEVELS:
         return data, ""
     return ROOT, ""
@@ -54,7 +54,9 @@ def encode(level, argument=""):
     if level == ROOT:
         return ""
     if level == APPS:
-        return f"{APPS}:{argument}"
-    if level == POWER and argument:
-        return f"{POWER}!{argument}"
+        if argument == ALL_APPS:
+            return APPS + ALL_APPS
+        if argument:
+            return f"{APPS}:{argument}"
+        return APPS
     return level

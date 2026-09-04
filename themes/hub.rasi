@@ -1,11 +1,14 @@
 /* hub.rasi -- the theme for the hub's list.
  *
  * Same palette as monochrome.rasi, which it is derived from; what differs is
- * how much fits on screen. The root shows pinned entries, folders AND the
- * hub's sections, so at twelve rows with generous padding the sections fell
- * off the bottom of a 1080p screen -- invisible, which defeats the point of
- * putting them there. Thirteen slightly tighter rows fit, and the window is
- * still `fixed-height: false`, so a short list does not pad itself out.
+ * how much fits on screen. The hub itself is five rows, but the sections it
+ * opens are long -- every application, five hundred emoji, two hundred
+ * clipboard entries -- and they share this theme. Fourteen rows is what fits
+ * on a 1080p screen with this padding; more and the window runs off the
+ * bottom edge, which was found by looking rather than by arithmetic.
+ *
+ * `fixed-height: false` matters here: the hub screen shrinks to its five rows
+ * instead of padding itself out to fourteen.
  *
  * The animations grid has its own theme (grid.rasi): it needs large
  * thumbnails, and rofi cannot restyle itself mid-session.
@@ -81,7 +84,7 @@ textbox {
 listview {
     background-color: transparent;
     spacing:            3px;
-    lines:              13;
+    lines:              14;
     cycle:              true;
     dynamic:             true;
     scrollbar:           false;

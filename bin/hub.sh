@@ -13,8 +13,15 @@
 # Перечисляем оба варианта через запятую, иначе клавиша молча не работает в
 # половине случаев. Стрелки от раскладки не зависят, им дубли не нужны.
 #
-# Первый аргумент — раздел, на котором открыться (clip, win, emoji, shot,
-# power). Пусто — корень.
+# Цифры 1..5 открывают раздел откуда угодно, а не только из корня. Цена
+# честная: rofi вешает привязку на всю сессию, поэтому цифру больше нельзя
+# набрать в строке фильтра. Взамен переход между разделами — одно нажатие.
+#
+# Tab отбирается у встроенного kb-element-next: в менеджере приложений он
+# переключает «избранное ↔ все приложения», и это самая частая операция.
+#
+# Первый аргумент — раздел, на котором открыться (apps, clip, emoji).
+# Пусто — корень.
 
 APP="$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)"
 HUB="$APP/rofi_hub/hub.py"
@@ -30,8 +37,15 @@ export ROFI_DATA
 exec rofi -show hub -modes "hub:$HUB" \
   ${THEME:+-theme "$THEME"} \
   -kb-row-up   "Up" \
+  -kb-element-next "" \
   -kb-custom-1 "Control+p,Control+Cyrillic_ze" \
   -kb-custom-3 "Control+Alt+Up" \
   -kb-custom-4 "Control+Alt+Down" \
   -kb-custom-5 "Alt+Left,Alt+BackSpace" \
-  -kb-custom-6 "Control+x,Control+Cyrillic_che"
+  -kb-custom-6 "Control+x,Control+Cyrillic_che" \
+  -kb-custom-7 "Tab" \
+  -kb-custom-8  "1" \
+  -kb-custom-9  "2" \
+  -kb-custom-10 "3" \
+  -kb-custom-11 "4" \
+  -kb-custom-12 "5"

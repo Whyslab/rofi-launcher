@@ -46,7 +46,7 @@ if [[ -z "$PREFIX" ]]; then
     ok "rofi $(rofi -version 2>/dev/null | head -1 | grep -oE '[0-9]+\.[0-9]+' | head -1) and python3 present"
     command -v gio >/dev/null || warn "gio not found (glib2) — launching falls back to parsing Exec by hand"
     command -v cliphist >/dev/null || warn "cliphist not found — the clipboard section will say so"
-    command -v hyprctl >/dev/null || warn "hyprctl not found — the windows and animations sections need it"
+    command -v hyprctl >/dev/null || warn "hyprctl not found — the animations section needs it"
     python3 -c 'import PIL' 2>/dev/null || warn "python-pillow not found — animation previews cannot be drawn"
 fi
 
@@ -62,6 +62,21 @@ run chmod 755 "$APP_DIR/rofi_hub/hub.py" "$APP_DIR/rofi_hub/anim_mode.py"
 for f in "${SRC_DIR}"/rofi_hub/sections/*.py; do
     run install -m 644 "$f" "$APP_DIR/rofi_hub/sections/$(basename "$f")"
 done
+
+# Installing only copies, so a section that was removed from the source would
+# otherwise sit in the installed tree forever: dead code that still imports,
+# still gets byte-compiled, and quietly contradicts the repository next time
+# anyone compares the two.
+if [[ -d "$APP_DIR/rofi_hub/sections" ]]; then
+    for f in "$APP_DIR"/rofi_hub/sections/*.py; do
+        [[ -e "$f" ]] || continue
+        if [[ ! -e "${SRC_DIR}/rofi_hub/sections/$(basename "$f")" ]]; then
+            run rm -f "$f"
+            ok "removed stale section $(basename "$f")"
+        fi
+    done
+    run rm -rf "$APP_DIR/rofi_hub/sections/__pycache__" "$APP_DIR/rofi_hub/__pycache__"
+fi
 for f in "${SRC_DIR}"/bin/*.sh; do
     run install -m 755 "$f" "$APP_DIR/bin/$(basename "$f")"
 done
@@ -141,6 +156,9 @@ echo "    \$menu = ${APP_DIR}/bin/hub.sh"
 echo "    bind = SUPER, R, exec, \$menu"
 echo "    bind = CTRL, J, exec, ${APP_DIR}/bin/hub-clipboard.sh"
 echo "    bind = SUPER SHIFT, W, exec, ${APP_DIR}/bin/hub-wallpaper.sh"
+echo
+echo "  Inside the hub: 1..5 open a section, Tab switches the applications"
+echo "  section between pinned entries and every application."
 echo
 echo "  The live animation preview needs a floating test window:"
 echo "    windowrule = match:class ^(anim-preview)\$, float true, size 600 400, center true"

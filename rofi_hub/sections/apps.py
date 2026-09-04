@@ -417,6 +417,22 @@ def folder_rows(folders):
     ]
 
 
+def all_rows(apps, favorites):
+    """Every application there is, most-launched first.
+
+    This is what Tab reaches. It used to be a folder you had to scroll past the
+    pinned entries to find, which made "show me everything" the slowest thing in
+    a launcher rather than the fastest.
+    """
+    usage = read_usage()
+    ids = sorted(apps, key=lambda i: _sort_key(apps, i))
+    ids.sort(key=lambda i: -usage.get(i, 0))
+    rows = [back_row(t("back"), t("back_meta"))]
+    for desktop_id in ids:
+        rows.append(app_row(desktop_id, apps[desktop_id], pinned=desktop_id in favorites))
+    return rows
+
+
 def build_folder(name, apps, folders, favorites):
     rows = [back_row(t("back"), t("back_meta"))]
 
@@ -473,8 +489,8 @@ def hotkey_move(desktop_id, favorites, delta):
 
 __all__ = [
     "CACHE_DIR", "CFG_DIR", "FAVORITES_FILE", "FOLDERS_FILE", "USAGE_FILE",
-    "app_row", "build_folder", "folder_rows", "hotkey_move", "hotkey_pin",
-    "hotkey_unpin", "launch", "layout_variants", "load_folders", "pinned_rows",
-    "read_favorites", "read_usage", "resolve_folder", "scan_apps",
-    "write_favorites",
+    "all_rows", "app_row", "build_folder", "folder_rows", "hotkey_move",
+    "hotkey_pin", "hotkey_unpin", "launch", "layout_variants", "load_folders",
+    "pinned_rows", "read_favorites", "read_usage", "resolve_folder",
+    "scan_apps", "write_favorites",
 ]

@@ -22,21 +22,19 @@ the six things you actually launch at the top and files the rest away.
 
 ## Sections
 
-The root is your pinned entries, your folders, and the list of sections. Typing
-filters both at once: "wall" finds the Wallpaper section, "fir" finds Firefox.
+Press the key, get a menu of five rows. Press a digit, get the section.
 
-| Section | What it does | Backed by |
-|---|---|---|
-| **Clipboard** | history; `Enter` copies, `Ctrl+X` deletes an entry | `cliphist` |
-| **Wallpaper** | a grid of thumbnails | own script, separate window |
-| **Animations** | animation presets with previews and a live demo | `hyprctl`, `hypr-dissolve` |
-| **Windows** | open windows, focus and close | `hyprctl` |
-| **Emoji** | 556 symbols, `Enter` copies | own database |
-| **Screenshot** | a region or the whole screen | external script |
-| **Power** | lock, suspend, hibernate, log out, reboot, shut down | `systemctl`, wlogout's layout |
+| | Section | What it does | Backed by |
+|---|---|---|---|
+| `1` | **Applications** | pinned entries; `Tab` for every application | `.desktop` |
+| `2` | **Clipboard** | history; `Enter` copies, `Ctrl+X` deletes | `cliphist` |
+| `3` | **Emoji** | 556 symbols | own database |
+| `4` | **Wallpaper** | a grid of thumbnails | own script, separate window |
+| `5` | **Animations** | presets with previews and a live demo | `hyprctl`, `hypr-dissolve` |
 
-The irreversible power entries ask for confirmation, and "No" is the first row —
-a reflex `Enter` cancels rather than shutting the machine down.
+The digits work **from inside any section**, not only from the menu: going from
+emoji to the clipboard is one keystroke. The cost is real: rofi binds a key for
+the whole session, so a digit can no longer be typed into the filter box.
 
 ## What's in it
 
@@ -109,8 +107,9 @@ installs into a throwaway directory.
 | `Alt+←` | back to the root screen |
 | `Ctrl+P` | pin the highlighted app, or unpin it if pinned |
 | `Ctrl+Alt+↑↓` | move a pinned entry up or down |
-| `Enter` on a section | enter it — the window stays open |
-| `Ctrl+X` | delete a clipboard entry, close a window |
+| `1`…`5` | open a section, from anywhere |
+| `Tab` | in applications: pinned ↔ every application |
+| `Ctrl+X` | delete a clipboard entry |
 | `Esc` | close |
 
 The animations grid has its own pair: `Enter` applies a preset for good,
@@ -254,6 +253,8 @@ on the machine.
 - **Lists do not refresh while the window is open.** Script mode only calls the
   script on a selection or a hotkey, so windows and clipboard entries are read
   when you enter the section.
+- **A digit cannot be typed into the filter.** `1`…`5` open sections, and rofi
+  binds a key for the whole session rather than for one screen.
 - **The wrong-layout pair is one pair.** Two layouts, not three.
 - **Icons are text glyphs, not images.** rofi's script mode can show icons per
   row, but each one costs an icon-theme lookup; this stays with glyphs to keep

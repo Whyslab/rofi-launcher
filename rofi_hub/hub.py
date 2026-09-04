@@ -1,12 +1,23 @@
 #!/usr/bin/env python3
 """
-The hub: one rofi script mode covering applications and every section.
+The hub: one rofi script mode, a menu of sections and the sections themselves.
 
 Protocol: man rofi-script(5).
   ROFI_RETV=0      — first call
   ROFI_RETV=1      — a row was selected ($1 = its text, ROFI_INFO = its info)
   ROFI_RETV=10..28 — kb-custom-1..19 (needs use-hot-keys=true)
   ROFI_DATA        — the state the script handed to itself last time
+
+The root screen is only the list of sections. It used to also carry the pinned
+applications and the folders, which meant that with eight pins the sections
+themselves sat below the fold of the screen — present but invisible, which is
+the opposite of what a hub is for. Applications are now a section like any
+other, reached with 1.
+
+Digits 1..5 jump straight to a section, from anywhere, not just from the root.
+The cost is real and worth stating: rofi binds a key for the whole session, so
+a digit can no longer be typed into the filter box. In exchange, switching
+between sections is one keystroke rather than Escape-and-back.
 
 Two sections are not drawn here — wallpaper and animations. Both need a grid
 with large thumbnails, and rofi cannot change its layout mid-session: the theme
@@ -37,94 +48,96 @@ from . import state
 from .rows import (
     ARROW,
     GLYPH_SEARCH,
-    GLYPH_SECTION,
+    back_row,
     dim,
     emit_directive,
     emit_row,
     separator,
 )
-from .sections import apps, clipboard, emoji, power, screenshot, wallpaper, windows
+from .sections import apps, clipboard, emoji, wallpaper
 from .strings import t
 
-# kb-custom-1..6 arrive as ROFI_RETV 10..15. The first five are the launcher's
-# original bindings and keep their meaning; 15 is the hub's "remove this".
-RETV_PIN, RETV_UNPIN, RETV_UP, RETV_DOWN, RETV_BACK, RETV_DELETE = 10, 11, 12, 13, 14, 15
+# kb-custom-1..11 arrive as ROFI_RETV 10..20.
+RETV_PIN = 10        # Ctrl+P
+RETV_UNPIN = 11      # unbound by default
+RETV_UP = 12         # Ctrl+Alt+Up
+RETV_DOWN = 13       # Ctrl+Alt+Down
+RETV_BACK = 14       # Alt+Left
+RETV_DELETE = 15     # Ctrl+X
+RETV_TAB = 16        # Tab
+RETV_DIGIT = 17      # 1 .. 5 occupy 17..21
 
-# level → (translation key for the title, module drawing it)
+# The order here is the order on the hub screen and the digit that opens each
+# one. Adding a section means adding a line here and a binding in bin/hub.sh.
+#
+# "window" entries are not drawn by this process at all: choosing one closes the
+# hub and opens a separate rofi with its own theme.
 SECTIONS = (
-    (state.CLIPBOARD, "sec_clipboard", "clip_hint"),
-    (state.WINDOWS, "sec_windows", "win_hint"),
-    (state.EMOJI, "sec_emoji", "emoji_hint"),
-    (state.SCREENSHOT, "sec_screenshot", "shot_hint"),
-    (state.POWER, "sec_power", "power_hint"),
+    ("apps",       "sec_apps",       "sec_apps_meta",       state.APPS),
+    ("clipboard",  "sec_clipboard",  "sec_clipboard_meta",  state.CLIPBOARD),
+    ("emoji",      "sec_emoji",      "sec_emoji_meta",      state.EMOJI),
+    ("wallpaper",  "sec_wallpaper",  "sec_wallpaper_meta",  None),
+    ("animations", "sec_animations", "sec_animations_meta", None),
 )
 
 
-def _section_row(level, label_key, meta_key, info):
-    return (f"go:{level}", {
-        "display": f"{dim(GLYPH_SECTION)}  {html.escape(t(label_key))}  {dim(ARROW)}",
-        "meta": t(meta_key),
-        "info": info,
-    })
+def _digit_target(index):
+    """Which section digit `index` (0-based) opens, or None."""
+    if 0 <= index < len(SECTIONS):
+        return SECTIONS[index]
+    return None
 
 
-def build_root(app_index, folders, favorites):
-    """Pinned applications, then folders, then the hub's own sections."""
-    rows = apps.pinned_rows(app_index, favorites)
-    folders_rows = apps.folder_rows(folders)
-
-    if rows and folders_rows:
-        rows.append(separator("apps"))
-    rows.extend(folders_rows)
-
-    section_rows = [
-        _section_row(state.CLIPBOARD, "sec_clipboard", "sec_clipboard_meta",
-                     f"go:{state.CLIPBOARD}"),
-        ("go:wallpaper", {
-            "display": f"{dim(GLYPH_SECTION)}  {html.escape(t('sec_wallpaper'))}  {dim(ARROW)}",
-            "meta": t("sec_wallpaper_meta"),
-            "info": "run:wallpaper",
-        }),
-        ("go:animations", {
-            "display": f"{dim(GLYPH_SECTION)}  {html.escape(t('sec_animations'))}  {dim(ARROW)}",
-            "meta": t("sec_animations_meta"),
-            "info": "run:animations",
-        }),
-        _section_row(state.WINDOWS, "sec_windows", "sec_windows_meta",
-                     f"go:{state.WINDOWS}"),
-        _section_row(state.EMOJI, "sec_emoji", "sec_emoji_meta", f"go:{state.EMOJI}"),
-        _section_row(state.SCREENSHOT, "sec_screenshot", "sec_screenshot_meta",
-                     f"go:{state.SCREENSHOT}"),
-        _section_row(state.POWER, "sec_power", "sec_power_meta", f"go:{state.POWER}"),
-    ]
-
-    if rows or folders_rows:
-        rows.append(separator("sections"))
-    rows.extend(section_rows)
+def build_hub():
+    rows = []
+    for number, (key, label_key, meta_key, level) in enumerate(SECTIONS, start=1):
+        info = f"go:{level}" if level is not None else f"run:{key}"
+        rows.append((f"hub:{key}", {
+            # The number is part of the label, not decoration: it is the key
+            # that opens the row, so it has to be visible on the row.
+            "display": f"{dim(str(number))}   {html.escape(t(label_key))}   {dim(ARROW)}",
+            "meta": f"{t(meta_key)} {number}",
+            "info": info,
+        }))
     return rows
 
 
-def _section_rows(level, argument):
+def _section_rows(level, argument, app_index, folders, favorites):
+    if level == state.APPS:
+        if argument == state.ALL_APPS:
+            return apps.all_rows(app_index, favorites)
+        if argument:
+            return apps.build_folder(argument, app_index, folders, favorites)
+        return _apps_pinned_rows(app_index, folders, favorites)
     if level == state.CLIPBOARD:
         return clipboard.rows()
-    if level == state.WINDOWS:
-        return windows.rows()
     if level == state.EMOJI:
         return emoji.rows()
-    if level == state.SCREENSHOT:
-        return screenshot.rows()
-    if level == state.POWER:
-        return power.confirm_rows(argument) if argument else power.rows()
     return []
 
 
+def _apps_pinned_rows(app_index, folders, favorites):
+    """The applications section as it opens: pinned first, folders under them."""
+    rows = [back_row(t("back"), t("back_meta"))]
+    rows.extend(apps.pinned_rows(app_index, favorites))
+    folder_rows = apps.folder_rows(folders)
+    if folder_rows:
+        rows.append(separator("apps"))
+        rows.extend(folder_rows)
+    return rows
+
+
 def _title_and_hint(level, argument):
-    for section_level, label_key, hint_key in SECTIONS:
-        if level == section_level:
-            if level == state.POWER and argument:
-                action = t(power.ACTIONS[argument][1]) if argument in power.ACTIONS else argument
-                return t("power_confirm", action=action), t("power_hint")
-            return t(label_key), t(hint_key)
+    if level == state.APPS:
+        if argument == state.ALL_APPS:
+            return t("all_apps"), t("hint_apps_all")
+        if argument:
+            return argument, t("hint_folder")
+        return t("sec_apps"), t("hint_apps_pinned")
+    if level == state.CLIPBOARD:
+        return t("sec_clipboard"), t("clip_hint")
+    if level == state.EMOJI:
+        return t("sec_emoji"), t("emoji_hint")
     return "", ""
 
 
@@ -134,19 +147,15 @@ def render(level, argument, app_index, folders, favorites, select_text=None, mes
     emit_directive("no-custom", "true")
     emit_directive("data", state.encode(level, argument))
 
-    if level == state.APPS:
-        emit_directive("prompt", argument)
-        rows = apps.build_folder(argument, app_index, folders, favorites)
-        hint = t("hint_folder")
-    elif level == state.ROOT:
+    if level == state.ROOT:
         if GLYPH_SEARCH:
             emit_directive("prompt", GLYPH_SEARCH)
-        rows = build_root(app_index, folders, favorites)
-        hint = t("hint_root")
+        rows = build_hub()
+        hint = t("hint_hub")
     else:
         title, hint = _title_and_hint(level, argument)
         emit_directive("prompt", title)
-        rows = _section_rows(level, argument)
+        rows = _section_rows(level, argument, app_index, folders, favorites)
 
     emit_directive("message", dim(html.escape(message or hint)))
 
@@ -166,23 +175,43 @@ def selected_id(info, argv_text):
     row's own text is the identifier."""
     if info.startswith("app:"):
         return info[4:]
-    if info.startswith(("dir:", "go:", "run:", "clip:", "win:", "emo:", "shot:",
-                        "pw:", "pwc:", "anim:")) or info == "up":
+    if info.startswith(("dir:", "go:", "run:", "hub:", "clip:", "emo:")) or info == "up":
         return None
     return argv_text or None
+
+
+def _open_window(script_name):
+    """Open one of the grid sections in its own rofi, detached."""
+    script = Path(__file__).resolve().parent.parent / "bin" / script_name
+    if not script.is_file():
+        return
+    subprocess.Popen(
+        [str(script)],
+        start_new_session=True, close_fds=True,
+        stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    )
+
+
+def _open_grid_section(key):
+    """Wallpaper and animations both open a window of their own; this is the one
+    place that knows which script each of them is."""
+    if key == "wallpaper":
+        wallpaper.open_picker()
+    elif key == "animations":
+        _open_window("hub-animations.sh")
 
 
 def _handle_selection(info, argv_text, level, argument, app_index, folders, favorites):
     """Returns True when the hub should close (empty output ends rofi)."""
     if info == "up" or argv_text == "..":
-        if level == state.APPS:
-            render(state.ROOT, "", app_index, folders, favorites,
-                   select_text=f"dir:{argument}")
-        elif level == state.POWER and argument:
-            render(state.POWER, "", app_index, folders, favorites)
+        # Inside a folder or the all-applications list, "back" means back to the
+        # applications section, not all the way out to the hub.
+        if level == state.APPS and argument:
+            render(state.APPS, "", app_index, folders, favorites,
+                   select_text=f"dir:{argument}" if argument != state.ALL_APPS else None)
         else:
             render(state.ROOT, "", app_index, folders, favorites,
-                   select_text=f"go:{level}")
+                   select_text=f"hub:{_key_for_level(level)}")
         return False
 
     if info.startswith("dir:"):
@@ -193,40 +222,16 @@ def _handle_selection(info, argv_text, level, argument, app_index, folders, favo
         render(info[3:], "", app_index, folders, favorites)
         return False
 
-    if info == "run:wallpaper":
-        wallpaper.open_picker()
-        return True
-
-    if info == "run:animations":
-        animations_picker()
+    if info.startswith("run:"):
+        _open_grid_section(info[4:])
         return True
 
     if info.startswith("clip:"):
         clipboard.copy(info[5:])
         return True
 
-    if info.startswith("win:"):
-        windows.focus(info[4:])
-        return True
-
     if info.startswith("emo:"):
         emoji.copy(info[4:])
-        return True
-
-    if info.startswith("shot:"):
-        screenshot.take(info[5:])
-        return True
-
-    if info.startswith("pw:"):
-        label = info[3:]
-        if power.needs_confirm(label):
-            render(state.POWER, label, app_index, folders, favorites)
-            return False
-        power.run(label)
-        return True
-
-    if info.startswith("pwc:"):
-        power.run(info[4:])
         return True
 
     desktop_id = selected_id(info, argv_text)
@@ -238,29 +243,42 @@ def _handle_selection(info, argv_text, level, argument, app_index, folders, favo
     return False
 
 
-def animations_picker():
-    """Open the animations grid in its own rofi window, detached."""
-    script = Path(__file__).resolve().parent.parent / "bin" / "hub-animations.sh"
-    if not script.is_file():
-        return
-    subprocess.Popen(
-        [str(script)],
-        start_new_session=True, close_fds=True,
-        stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-    )
+def _key_for_level(level):
+    for key, _, _, section_level in SECTIONS:
+        if section_level == level:
+            return key
+    return "apps"
 
 
 def _handle_hotkey(retv, info, argv_text, level, argument, app_index, folders, favorites):
     """Returns True when the hub should close."""
-    if retv == RETV_BACK:
+    if RETV_DIGIT <= retv < RETV_DIGIT + len(SECTIONS):
+        section = _digit_target(retv - RETV_DIGIT)
+        if section is None:
+            render(level, argument, app_index, folders, favorites)
+            return False
+        key, _, _, section_level = section
+        if section_level is None:
+            _open_grid_section(key)
+            return True
+        render(section_level, "", app_index, folders, favorites)
+        return False
+
+    if retv == RETV_TAB:
+        # Only the applications section has anything to toggle.
         if level == state.APPS:
-            render(state.ROOT, "", app_index, folders, favorites,
-                   select_text=f"dir:{argument}")
-        elif level == state.ROOT:
-            render(state.ROOT, "", app_index, folders, favorites)
+            new_argument = "" if argument == state.ALL_APPS else state.ALL_APPS
+            render(state.APPS, new_argument, app_index, folders, favorites)
+        else:
+            render(level, argument, app_index, folders, favorites)
+        return False
+
+    if retv == RETV_BACK:
+        if level == state.APPS and argument:
+            render(state.APPS, "", app_index, folders, favorites)
         else:
             render(state.ROOT, "", app_index, folders, favorites,
-                   select_text=f"go:{level}")
+                   select_text=f"hub:{_key_for_level(level)}")
         return False
 
     if retv == RETV_DELETE:
@@ -269,18 +287,11 @@ def _handle_hotkey(retv, info, argv_text, level, argument, app_index, folders, f
             render(level, argument, app_index, folders, favorites,
                    message=t("clip_deleted"))
             return False
-        if level == state.WINDOWS and info.startswith("win:"):
-            address = info[4:]
-            name = windows.name_of(address)
-            windows.close(address)
-            render(level, argument, app_index, folders, favorites,
-                   message=t("win_closed", name=name))
-            return False
         render(level, argument, app_index, folders, favorites)
         return False
 
     # The pin hotkeys only mean anything where applications are listed.
-    if level not in (state.ROOT, state.APPS):
+    if level != state.APPS:
         render(level, argument, app_index, folders, favorites)
         return False
 

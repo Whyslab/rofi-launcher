@@ -155,12 +155,30 @@ def revert_live():
     subprocess.run(["hyprctl", "reload"], capture_output=True, check=False)
 
 
+def notify(text):
+    """Say something happened.
+
+    Applying a preset changes how windows move, which is invisible until the
+    next time a window opens — and picking the preset that is already on
+    changes nothing at all. Without a word from the machine both look exactly
+    like a menu that did not work.
+    """
+    subprocess.run(
+        ["notify-send", "-a", "rofi-hub", "-i", "preferences-desktop-effects",
+         t("sec_animations"), text],
+        capture_output=True, check=False,
+    )
+
+
 def apply_persistent(preset):
     """Write the preset out and reload. Survives a reboot."""
     validate(preset)
+    was_active = active_id() == preset["id"]
     path = hyprconf.write(preset)
     _set_active(preset["id"])
     subprocess.run(["hyprctl", "reload"], capture_output=True, check=False)
+    name = _localized(preset.get("name"))
+    notify(t("anim_already", name=name) if was_active else t("anim_applied", name=name))
     return path
 
 

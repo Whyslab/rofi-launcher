@@ -17,8 +17,24 @@ def test_the_shipped_default_parses(tmp_path, monkeypatch):
     conf.write_text(launcher.DEFAULT_FOLDERS)
     monkeypatch.setattr(launcher, "FOLDERS_FILE", conf)
     folders = launcher.load_folders()
-    assert [f["name"] for f in folders][-1] == "All applications"
-    assert any("@all" in f["items"] for f in folders)
+    assert [f["name"] for f in folders] == [
+        "Development", "Internet", "Media", "Graphics",
+        "Office", "Terminal", "Settings",
+    ]
+    assert all(f["items"] for f in folders), "a folder with no rules lists nothing"
+
+
+def test_the_default_has_no_everything_folder():
+    """Tab reaches every application from the pinned list. A folder that does
+    the same thing is a row you have to scroll to for something a key already
+    does, which is what it was there for before."""
+    # "@all" still appears in the comment header that documents the syntax —
+    # what must be gone is a section that uses it.
+    rules = [
+        line.strip() for line in launcher.DEFAULT_FOLDERS.splitlines()
+        if line.strip() and not line.strip().startswith("#")
+    ]
+    assert "@all" not in rules
 
 
 def test_a_missing_file_falls_back_to_the_default(tmp_path, monkeypatch):

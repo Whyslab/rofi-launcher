@@ -51,6 +51,42 @@ def bezier_y(points, t):
     return 3 * u * u * t * y0 + 3 * u * t * t * y1 + t ** 3
 
 
+def _duration(preset):
+    """How long the preset's window animation takes, in Hyprland's units.
+
+    The tile has to separate a fast preset from a slow one: without this,
+    "Slide" and "Cinematic" differ only in numbers nobody sees and render as
+    the same picture, which makes the grid useless for choosing between them.
+    """
+    animations = preset.get("animations") or {}
+    for leaf in ("windowsOut", "windowsIn", "fadeOut", "global"):
+        spec = animations.get(leaf)
+        if not spec:
+            continue
+        parts = [x.strip() for x in str(spec).split(",")]
+        if len(parts) > 1:
+            try:
+                return float(parts[1])
+            except ValueError:
+                pass
+    return 6.0
+
+
+def _trail_shape(preset, motion):
+    """(ghost count, how far the trail reaches) from the preset's own timing.
+
+    A slow animation leaves a long trail with many steps; a quick one leaves a
+    short, tight one. Both are read off the same number Hyprland uses."""
+    if motion == "none":
+        return 1, 0.0
+    speed = _duration(preset)
+    # Durations in practice run from about 3 (snappy) to 34 (the fog fade-out).
+    weight = min(1.0, max(0.0, (speed - 3.0) / 12.0))
+    count = 3 + round(4 * weight)
+    reach = 0.34 + 0.46 * weight
+    return count, reach
+
+
 def _first_curve(preset):
     beziers = preset.get("beziers") or {}
     for points in beziers.values():
@@ -69,7 +105,7 @@ def _rect(scale=1.0, dx=0.0, dy=0.0):
     )
 
 
-def _ghosts(motion, count, curve):
+def _ghosts(motion, count, curve, reach):
     """The trailing positions, faintest first. The final window is drawn
     separately — these are only where it has been."""
     out = []
@@ -77,13 +113,24 @@ def _ghosts(motion, count, curve):
         t = i / max(1, count - 1)
         eased = bezier_y(curve, t)
         alpha = int(45 + 90 * t)
-        if motion == "slide":
-            out.append((_rect(dx=-0.66 * (1 - eased)), alpha))
+        if motion in ("slide", "slidefade"):
+            out.append((_rect(dx=-reach * (1 - eased)), alpha))
+        elif motion == "slidevert":
+            out.append((_rect(dy=-reach * 0.95 * (1 - eased)), alpha))
         elif motion == "scale":
-            # Deliberately drawn growing past the final window rather than up to
-            # it: ghosts that stay inside end up hidden underneath the solid
-            # rectangle, which is a tile that says nothing.
-            out.append((_rect(scale=0.30 + 1.05 * eased), alpha))
+            # `eased` is deliberately not clamped: a curve that overshoots (the
+            # bounce preset's does, ending above 1) then draws a ring wider than
+            # the window, which is exactly what overshoot looks like.
+            out.append((_rect(scale=0.30 + 0.80 * eased), alpha))
+        elif motion == "bounce":
+            # A halo of rings well outside the window, widest first: the window
+            # overshot its size and settled back.
+            #
+            # They all have to sit outside: `scale` already draws rings that
+            # start small, and anything drawn inside the window is painted over
+            # by it, so an inner ring would make the two tiles identical at icon
+            # size — which is exactly what happened before.
+            out.append((_rect(scale=1.0 + 0.62 * (1 - t)), alpha))
     return out
 
 
@@ -94,6 +141,22 @@ def _draw_ghost(draw, rect, alpha):
     draw.rectangle(rect, fill=FG + (max(8, alpha // 6),), outline=FG + (alpha,), width=3)
 
 
+def _draw_materialise(draw, rect, count):
+    """A fade, drawn as vertical bands going from barely there to solid.
+
+    A fade has nowhere to travel, so ghosts at the same place would stack into
+    one flat rectangle and say nothing. Bands keep the "it is arriving" reading
+    without pretending the window moves."""
+    x0, y0, x1, y1 = rect
+    step = (x1 - x0) / count
+    for i in range(count):
+        alpha = int(30 + (200 * i) / max(1, count - 1))
+        draw.rectangle(
+            [x0 + i * step, y0, x0 + (i + 1) * step, y1],
+            fill=FG + (alpha,),
+        )
+
+
 def _draw_dust(draw, rect, preset):
     """The pixel cloud, shaped by the dissolve plugin's own numbers.
 
@@ -102,26 +165,36 @@ def _draw_dust(draw, rect, preset):
     dissolve presets that differ only in those numbers get visibly different
     pictures, which is the entire point of showing a picture."""
     plugin = preset.get("dissolve") or {}
-    size = max(2, int(plugin.get("block_size", 4)))
+    block = max(2, int(plugin.get("block_size", 4)))
     spread = float(plugin.get("spread", 0.55))
     rise = float(plugin.get("rise", 200))
     life = float(plugin.get("dust_life", 0.35))
 
     x0, y0, x1, y1 = rect
     width, height = x1 - x0, y1 - y0
-    count = int(90 + 260 * life)
     reach_x = width * (0.35 + spread)
     reach_y = height * (rise / 200.0) * 0.9
 
-    rng = _Rng(seed=int(size * 131 + spread * 977 + rise))
+    # dust_life is how long a particle survives, and that is what separates a
+    # crisp scatter from a haze. Long-lived debris is drawn as many big, faint,
+    # overlapping flecks that blur together; short-lived debris as fewer, small,
+    # opaque ones. Without this, two presets that differ only in dust_life came
+    # out as the same picture — the flecks were the same size either way and the
+    # difference averaged out the moment the tile was scaled to an icon.
+    haze = min(1.0, life / 1.6)
+    count = int(70 + 420 * life)
+    size = block * (1.0 + 2.2 * haze)
+    opacity = 230 - int(150 * haze)
+
+    rng = _Rng(seed=int(block * 131 + spread * 977 + rise + life * 61))
     for _ in range(count):
         # Particles leave from the right-hand side and travel up and out, so the
         # window still reads as a window rather than as noise.
         origin = rng.next_float() ** 0.6
         px = x0 + width * (0.45 + 0.55 * rng.next_float()) + origin * reach_x
         py = y0 + height * rng.next_float() - origin * reach_y
-        fade = int(230 * (1 - origin) ** 1.4)
-        if fade < 10:
+        fade = int(opacity * (1 - origin) ** 1.4)
+        if fade < 8:
             continue
         jitter = size * (0.7 + 0.6 * rng.next_float())
         draw.rectangle([px, py, px + jitter, py + jitter], fill=FG + (fade,))
@@ -148,8 +221,8 @@ class _Rng:
 def render(preset):
     spec = preset.get("preview") or {}
     motion = spec.get("motion", "scale")
-    count = max(1, int(spec.get("phases", 5)))
     curve = _first_curve(preset)
+    count, reach = _trail_shape(preset, motion)
 
     image = Image.new("RGBA", (WIDTH, HEIGHT), BG)
     ImageDraw.Draw(image).rectangle([0, 0, WIDTH - 1, HEIGHT - 1], outline=FRAME)
@@ -160,15 +233,23 @@ def render(preset):
     # does not blend, whatever draw mode it is given.
     trail = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
     trail_draw = ImageDraw.Draw(trail)
-    for rect, alpha in _ghosts(motion, count, curve):
+    for rect, alpha in _ghosts(motion, count, curve, reach):
         _draw_ghost(trail_draw, rect, alpha)
     if motion == "dissolve":
         _draw_dust(trail_draw, window, preset)
+    elif motion == "fade":
+        _draw_materialise(trail_draw, window, count + 2)
+    elif motion == "slidefade":
+        # The style really is slidefade: it travels and it fades. Showing only
+        # the travel made this identical to plain `slide`.
+        _draw_materialise(trail_draw, window, count + 3)
     image = Image.alpha_composite(image, trail)
 
-    # The window itself is opaque and lands on top of its own trail.
     draw = ImageDraw.Draw(image)
-    draw.rectangle(window, fill=FG)
+    # A fade is entirely the bands above; painting the window solid over them
+    # would erase the only thing the tile has to say.
+    if motion not in ("fade", "slidefade"):
+        draw.rectangle(window, fill=FG)
 
     if motion == "none":
         # Nothing moves, so say so with a shape rather than leaving a tile

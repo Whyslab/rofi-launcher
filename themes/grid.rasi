@@ -23,7 +23,7 @@
 }
 
 window {
-    width: 760px;
+    width: 940px;
     background-color: @bg;
     border: 1px solid;
     border-color: #222222;
@@ -68,9 +68,12 @@ textbox {
     vertical-align: 0.5;
 }
 
+/* 3 строки, а не 2: пресетов одиннадцать, и при двух строках шесть из них
+   были за пределами окна — сетку приходилось листать вместо того, чтобы
+   сравнивать взглядом, ради чего она и нужна. */
 listview {
-    columns: 3;
-    lines: 2;
+    columns: 4;
+    lines: 3;
     fixed-height: false;
     spacing: 10px;
     scrollbar: false;
@@ -94,10 +97,10 @@ element selected.normal {
     text-color: @accent-text;
 }
 
-/* 150px, а не 200: тайл анимации шире, чем высок (320×200), и при 200
-   строка из трёх штук не влезает в окно 760px. */
+/* 130px: тайл шире, чем высок (320×200), и при большем размере четыре штуки
+   в ряд не помещаются в окно 940px, а три строки — в высоту экрана. */
 element-icon {
-    size: 150px;
+    size: 130px;
     background-color: transparent;
     horizontal-align: 0.5;
 }

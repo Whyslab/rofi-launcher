@@ -240,7 +240,7 @@ DEFAULT_FOLDERS = """\
 #   [Folder name]
 #   @icon: <icon name>         optional
 #   @category: Development     everything in that .desktop category
-#   @all                       every application there is
+#   @all                       every application there is (Tab already does this)
 #   somefile.desktop           one specific application
 #   -somefile.desktop          exclude an application
 #
@@ -271,9 +271,6 @@ DEFAULT_FOLDERS = """\
 [Settings]
 @category: Settings
 @category: System
-
-[All applications]
-@all
 """
 
 

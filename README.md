@@ -30,7 +30,7 @@ Press the key, get a menu of five rows. Press a digit, get the section.
 | `2` | **Clipboard** | history; `Enter` copies, `Ctrl+X` deletes | `cliphist` |
 | `3` | **Emoji** | 556 symbols | own database |
 | `4` | **Wallpaper** | a grid of thumbnails | own script, separate window |
-| `5` | **Animations** | presets with previews and a live demo | `hyprctl`, `hypr-dissolve` |
+| `5` | **Animations** | 11 presets with previews and a live demo | `hyprctl`, `hypr-dissolve` |
 
 The digits work **from inside any section**, not only from the menu: going from
 emoji to the clipboard is one keystroke. The cost is real: rofi binds a key for
@@ -133,6 +133,18 @@ Applying and previewing are different things:
 
 So previewing cannot damage a configuration: it writes nothing, and `reload` is
 a real undo button.
+
+What ships with it:
+
+| With the dissolve plugin | Without it |
+|---|---|
+| **Dissolve** — the default behaviour | **Slide** — moves aside, quickly |
+| **Dust** — fine debris, thrown wide | **Scale** — grows from the centre |
+| **Fog** — settles and lingers | **Bounce** — overshoots and settles back |
+| **Blast** — big shards, fast | **Smooth** — fades only, nothing moves |
+| | **Vertical** — everything moves up and down |
+| | **Cinematic** — slow and deliberate |
+| | **Instant** — everything off |
 
 **Both** Hyprland config formats are generated, classic and Lua. The moment a
 `hyprland.lua` exists the compositor stops reading `.conf` entirely — and a

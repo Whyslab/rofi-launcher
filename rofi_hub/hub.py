@@ -45,15 +45,7 @@ if __package__ in (None, ""):  # run directly, not imported
     __package__ = "rofi_hub"
 
 from . import state
-from .rows import (
-    ARROW,
-    GLYPH_SEARCH,
-    back_row,
-    dim,
-    emit_directive,
-    emit_row,
-    separator,
-)
+from .rows import ARROW, GLYPH_SEARCH, back_row, dim, emit_directive, emit_row
 from .sections import apps, clipboard, emoji, wallpaper
 from .strings import t
 
@@ -117,13 +109,17 @@ def _section_rows(level, argument, app_index, folders, favorites):
 
 
 def _apps_pinned_rows(app_index, folders, favorites):
-    """The applications section as it opens: pinned first, folders under them."""
+    """The applications section as it opens: the pinned entries.
+
+    No separator and no rule above the folders: with Tab reaching every
+    application, the only folder most setups had was an "everything" one, and a
+    horizontal rule above a single redundant row is furniture, not structure.
+    Folders still appear if any are configured — they just follow the pins
+    directly.
+    """
     rows = [back_row(t("back"), t("back_meta"))]
     rows.extend(apps.pinned_rows(app_index, favorites))
-    folder_rows = apps.folder_rows(folders)
-    if folder_rows:
-        rows.append(separator("apps"))
-        rows.extend(folder_rows)
+    rows.extend(apps.folder_rows(folders))
     return rows
 
 

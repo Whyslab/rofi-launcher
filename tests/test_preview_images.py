@@ -52,15 +52,36 @@ def test_a_preview_is_not_blank(path):
     assert bright > 500, "the window is not visible in the tile"
 
 
-def test_presets_do_not_all_look_the_same():
-    """Three of the presets differ only in the dissolve plugin's numbers. If the
-    renderer ignored those, the grid would show three identical tiles and be
-    useless for choosing between them."""
-    images = {}
+# Below this, two tiles are the same picture as far as an eye scanning a grid of
+# thumbnails is concerned. Measured on the shipped presets, the closest pair sits
+# around 2, so 1.5 catches a real collision without tripping on a tweak.
+MIN_TILE_DIFFERENCE = 1.5
+
+
+def _thumbnail(preset):
+    """What the tile amounts to at the size rofi actually shows it."""
+    image = render_preview.render(preset).convert("L").resize((40, 25))
+    return list(image.tobytes())
+
+
+def test_no_two_presets_render_as_the_same_picture():
+    """Byte inequality is not enough, and testing only that was a mistake: it
+    passed while `scale` and `bounce` were visually identical and the grid could
+    not be used to choose between them. This compares the tiles the way someone
+    scanning them does — small, grey and side by side."""
+    thumbs = {}
     for path in PRESETS:
         preset = json.loads(path.read_text(encoding="utf-8"))
-        images[preset["id"]] = render_preview.render(preset).tobytes()
-    assert len(set(images.values())) == len(images), "two presets render identically"
+        thumbs[preset["id"]] = _thumbnail(preset)
+
+    ids = sorted(thumbs)
+    for i, first in enumerate(ids):
+        for second in ids[i + 1:]:
+            a, b = thumbs[first], thumbs[second]
+            difference = sum(abs(x - y) for x, y in zip(a, b, strict=True)) / len(a)
+            assert difference >= MIN_TILE_DIFFERENCE, (
+                f"{first} and {second} render as the same tile ({difference:.1f})"
+            )
 
 
 def test_the_dissolve_numbers_actually_change_the_picture():

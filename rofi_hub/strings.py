@@ -82,6 +82,28 @@ STRINGS = {
         "anim_applied": 'Preset "{name}" applied',
         "anim_already": '"{name}" is already on — nothing changed',
         "anim_none": "No presets found",
+        "anim_root_hint": "Enter — open · the categories change one part of the preset",
+        "anim_cat_hint": "Enter — apply · Ctrl+Alt+Space — show just this, live",
+        "anim_presets": "Presets",
+        "anim_customised": "tuned",
+        "anim_cat_open": "Window open",
+        "anim_cat_close": "Window close",
+        "anim_cat_workspaces": "Workspace switch",
+        "anim_cat_layers": "Menus and notifications",
+        "anim_as_preset": "As in the preset",
+        "anim_speed_row": "Speed: {speed}",
+        "anim_speed_fast": "Fast",
+        "anim_speed_normal": "Normal",
+        "anim_speed_slow": "Slow",
+        "anim_cat_applied": "{category}: {name}",
+        "anim_cat_reset": "{category}: back to the preset",
+        "anim_speed_applied": "{category}: speed {speed}",
+        "anim_no_preset": "No preset is active — pick one under Presets first",
+        "anim_needs_window_dissolve": "(only with dissolve on window close)",
+        "anim_menu_dissolve_needs_windows": (
+            "Menus can only dissolve while windows close with a dissolve — "
+            "pick a dissolve under Window close first"
+        ),
     },
     "ru": {
         # apps
@@ -129,6 +151,28 @@ STRINGS = {
         "anim_applied": "Пресет «{name}» применён",
         "anim_already": "«{name}» и так включён — ничего не изменилось",
         "anim_none": "Пресеты не найдены",
+        "anim_root_hint": "Enter — открыть · категории меняют одну часть набора",
+        "anim_cat_hint": "Enter — применить · Ctrl+Alt+Пробел — показать только это вживую",
+        "anim_presets": "Готовые наборы",
+        "anim_customised": "изменён",
+        "anim_cat_open": "Открытие окон",
+        "anim_cat_close": "Закрытие окон",
+        "anim_cat_workspaces": "Переключение столов",
+        "anim_cat_layers": "Меню и уведомления",
+        "anim_as_preset": "Как в наборе",
+        "anim_speed_row": "Скорость: {speed}",
+        "anim_speed_fast": "Быстро",
+        "anim_speed_normal": "Обычно",
+        "anim_speed_slow": "Медленно",
+        "anim_cat_applied": "{category}: {name}",
+        "anim_cat_reset": "{category}: как в наборе",
+        "anim_speed_applied": "{category}: скорость — {speed}",
+        "anim_no_preset": "Набор не выбран — сначала выбери его в «Готовых наборах»",
+        "anim_needs_window_dissolve": "(только при распаде окон)",
+        "anim_menu_dissolve_needs_windows": (
+            "Меню рассыпаются только вместе с окнами — сначала выбери распад "
+            "в «Закрытии окон»"
+        ),
     },
 }
 

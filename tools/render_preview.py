@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Draws one preview image per animation preset.
+Draws one preview image per animation preset, and one per category variant.
 
 Rofi cannot show an animated preview: its binary only links
 gdk_pixbuf_new_from_file_at_scale, the single-frame loader, and has no
@@ -11,6 +11,8 @@ So the preview is a strobe instead: the same window drawn at several points
 along the preset's own motion, earlier phases fainter. It is computed from the
 preset's numbers — its bezier curve, its duration, its style — not recorded off
 the screen, which keeps it deterministic and reproducible in a test.
+
+Presets go to DIR/<id>.png, variants to DIR/<category>/<id>.png.
 
 Run:  python3 tools/render_preview.py [--out DIR]
 """
@@ -25,6 +27,7 @@ from PIL import Image, ImageDraw
 
 REPO = Path(__file__).resolve().parent.parent
 PRESET_DIR = REPO / "data" / "presets"
+VARIANT_DIR = REPO / "data" / "animations"
 DEFAULT_OUT = Path.home() / ".cache" / "rofi-launcher" / "anim-previews"
 
 WIDTH, HEIGHT = 320, 200
@@ -59,7 +62,8 @@ def _duration(preset):
     the same picture, which makes the grid useless for choosing between them.
     """
     animations = preset.get("animations") or {}
-    for leaf in ("windowsOut", "windowsIn", "fadeOut", "global"):
+    for leaf in ("windowsOut", "windowsIn", "fadeOut", "workspaces", "layersIn",
+                 "layersOut", "global"):
         spec = animations.get(leaf)
         if not spec:
             continue
@@ -115,6 +119,16 @@ def _ghosts(motion, count, curve, reach):
         alpha = int(45 + 90 * t)
         if motion in ("slide", "slidefade"):
             out.append((_rect(dx=-reach * (1 - eased)), alpha))
+        elif motion == "snapslide":
+            # A snap: two ghosts bunched right against the window, none far out.
+            out.append((_rect(dx=-reach * 0.35 * (1 - eased) - 0.03), alpha))
+        elif motion == "drop":
+            # Anticipation then a fall: the faintest ghost sits a little above,
+            # the rest fall away below.
+            lift = 0.08 if i == 0 else -reach * 0.9 * t
+            out.append((_rect(dy=-lift), alpha))
+        elif motion in INNER_MOTIONS:
+            pass  # drawn over the window instead, see _inner_ghosts
         elif motion == "slidevert":
             out.append((_rect(dy=-reach * 0.95 * (1 - eased)), alpha))
         elif motion == "scale":
@@ -134,6 +148,36 @@ def _ghosts(motion, count, curve, reach):
     return out
 
 
+# Motions whose trail lies inside the window's final outline. Drawn as ghosts
+# they would be painted over by the window and the tile would be a plain white
+# box — indistinguishable from "none". So they are cut into the window as dark
+# outlines instead.
+INNER_MOTIONS = ("zoom", "unfold", "pop")
+
+
+def _inner_ghosts(motion, count, curve):
+    out = []
+    for i in range(count - 1):
+        t = i / max(1, count - 1)
+        eased = bezier_y(curve, t)
+        shade = int(40 + 110 * t)
+        if motion == "zoom":
+            out.append((_rect(scale=0.08 + 0.7 * eased), shade))
+        elif motion == "unfold":
+            out.append((_rect_unfold(0.06 + 0.8 * eased), shade))
+        elif motion == "pop":
+            out.append((_rect(scale=0.72 + 0.22 * t), shade))
+    return out
+
+
+def _rect_unfold(height_scale):
+    """The window squashed to a strip around its horizontal centre line."""
+    x0, y0, x1, y1 = _rect()
+    cy = (y0 + y1) / 2
+    half = (y1 - y0) / 2 * height_scale
+    return (x0, cy - half, x1, cy + half)
+
+
 def _draw_ghost(draw, rect, alpha):
     """An outline plus a barely-there fill. Drawn onto a transparent overlay:
     PIL's rectangle writes the colour it is given rather than blending it, so
@@ -141,7 +185,7 @@ def _draw_ghost(draw, rect, alpha):
     draw.rectangle(rect, fill=FG + (max(8, alpha // 6),), outline=FG + (alpha,), width=3)
 
 
-def _draw_materialise(draw, rect, count):
+def _draw_materialise(draw, rect, count, top=230):
     """A fade, drawn as vertical bands going from barely there to solid.
 
     A fade has nowhere to travel, so ghosts at the same place would stack into
@@ -150,7 +194,7 @@ def _draw_materialise(draw, rect, count):
     x0, y0, x1, y1 = rect
     step = (x1 - x0) / count
     for i in range(count):
-        alpha = int(30 + (200 * i) / max(1, count - 1))
+        alpha = int(30 + ((top - 30) * i) / max(1, count - 1))
         draw.rectangle(
             [x0 + i * step, y0, x0 + (i + 1) * step, y1],
             fill=FG + (alpha,),
@@ -222,7 +266,7 @@ def render(preset):
     spec = preset.get("preview") or {}
     motion = spec.get("motion", "scale")
     curve = _first_curve(preset)
-    count, reach = _trail_shape(preset, motion)
+    count, reach = preset.get("_trail") or _trail_shape(preset, motion)
 
     image = Image.new("RGBA", (WIDTH, HEIGHT), BG)
     ImageDraw.Draw(image).rectangle([0, 0, WIDTH - 1, HEIGHT - 1], outline=FRAME)
@@ -239,6 +283,13 @@ def render(preset):
         _draw_dust(trail_draw, window, preset)
     elif motion == "fade":
         _draw_materialise(trail_draw, window, count + 2)
+    elif motion == "slowfade":
+        # A long fade: a wide, pale gradient that starts far to the left and
+        # never gets bright. Drawn the same way as `fade` but at the window's
+        # size it was indistinguishable from it at icon size.
+        x0, y0, x1, y1 = window
+        wide = (x0 - (x1 - x0) * 1.1, y0 + 6, x1, y1 - 6)
+        _draw_materialise(trail_draw, wide, count + 10, top=215)
     elif motion == "slidefade":
         # The style really is slidefade: it travels and it fades. Showing only
         # the travel made this identical to plain `slide`.
@@ -248,8 +299,16 @@ def render(preset):
     draw = ImageDraw.Draw(image)
     # A fade is entirely the bands above; painting the window solid over them
     # would erase the only thing the tile has to say.
-    if motion not in ("fade", "slidefade"):
+    if motion not in ("fade", "slidefade", "slowfade"):
         draw.rectangle(window, fill=FG)
+    if motion == "dissolve" and float((preset.get("dissolve") or {}).get("wave", 0)) >= 0.95:
+        # A strict top-to-bottom front: the upper part of the window is already
+        # gone. Only for a strict front, so the shipped presets keep their tiles.
+        x0, y0, x1, y1 = window
+        draw.rectangle([x0, y0, x1, y0 + (y1 - y0) * 0.45], fill=BG[:3])
+    if motion in INNER_MOTIONS:
+        for rect, shade in _inner_ghosts(motion, count + 1, curve):
+            draw.rectangle(rect, outline=(shade, shade, shade), width=3)
 
     if motion == "none":
         # Nothing moves, so say so with a shape rather than leaving a tile
@@ -261,23 +320,55 @@ def render(preset):
     return image.convert("RGB")
 
 
+def ui_tiles():
+    """Pictures for the tiles that are not an animation: back and the speeds.
+
+    In the grid every tile has room for a picture; a tile without one is a big
+    empty box that reads as broken."""
+    tiles = {}
+    back = Image.new("RGBA", (WIDTH, HEIGHT), BG)
+    draw = ImageDraw.Draw(back)
+    draw.rectangle([0, 0, WIDTH - 1, HEIGHT - 1], outline=FRAME)
+    cy = HEIGHT / 2
+    draw.line([WIDTH * 0.32, cy, WIDTH * 0.68, cy], fill=FG, width=12)
+    draw.polygon([(WIDTH * 0.24, cy), (WIDTH * 0.40, cy - 34), (WIDTH * 0.40, cy + 34)], fill=FG)
+    tiles["back"] = back.convert("RGB")
+    for name, reach, count in (("fast", 0.12, 2), ("normal", 0.32, 4), ("slow", 0.62, 7)):
+        tiles[f"speed-{name}"] = render({
+            "animations": {"windowsIn": "1, 5, x"},
+            "beziers": {},
+            "preview": {"motion": "slide"},
+            "_trail": (count, reach),
+        })
+    return tiles
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
     args = parser.parse_args()
 
     args.out.mkdir(parents=True, exist_ok=True)
+    jobs = [(path, args.out) for path in sorted(PRESET_DIR.glob("*.json"))]
+    for folder in sorted(p for p in VARIANT_DIR.glob("*") if p.is_dir()):
+        jobs += [(path, args.out / folder.name) for path in sorted(folder.glob("*.json"))]
+
     count = 0
-    for path in sorted(PRESET_DIR.glob("*.json")):
+    for path, out_dir in jobs:
         try:
-            preset = json.loads(path.read_text(encoding="utf-8"))
+            item = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, ValueError) as exc:
             print(f"пропущен {path.name}: {exc}", file=sys.stderr)
             continue
-        target = args.out / f"{preset['id']}.png"
-        # optimize=False and no timestamp chunk: the same preset must produce
-        # the same bytes on every run, or the determinism test is meaningless.
-        render(preset).save(target, "PNG", optimize=False)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        # optimize=False and no timestamp chunk: the same file must produce the
+        # same bytes on every run, or the determinism test is meaningless.
+        render(item).save(out_dir / f"{item['id']}.png", "PNG", optimize=False)
+        count += 1
+    ui = args.out / "_ui"
+    ui.mkdir(parents=True, exist_ok=True)
+    for name, image in ui_tiles().items():
+        image.save(ui / f"{name}.png", "PNG", optimize=False)
         count += 1
     print(f"{count} превью → {args.out}")
 

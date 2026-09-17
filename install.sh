@@ -87,6 +87,25 @@ run install -m 644 "${SRC_DIR}/data/emoji.ru.json" "$APP_DIR/data/emoji.ru.json"
 for f in "${SRC_DIR}"/data/presets/*.json; do
     run install -m 644 "$f" "$APP_DIR/data/presets/$(basename "$f")"
 done
+# Category variants (window open/close, workspaces, menus). A variant removed
+# from the repository is removed here too, or it would stay selectable forever.
+for dir in "${SRC_DIR}"/data/animations/*/; do
+    category="$(basename "$dir")"
+    run install -d -m 755 "$APP_DIR/data/animations/$category"
+    for f in "$dir"*.json; do
+        run install -m 644 "$f" "$APP_DIR/data/animations/$category/$(basename "$f")"
+    done
+done
+if [[ -d "$APP_DIR/data/animations" ]]; then
+    for f in "$APP_DIR"/data/animations/*/*.json; do
+        [[ -e "$f" ]] || continue
+        rel="${f#"$APP_DIR"/data/animations/}"
+        if [[ ! -e "${SRC_DIR}/data/animations/$rel" ]]; then
+            run rm -f "$f"
+            ok "removed stale variant $rel"
+        fi
+    done
+fi
 run install -m 755 "${SRC_DIR}/tools/render_preview.py" "$APP_DIR/tools/render_preview.py"
 ok "installed to ${APP_DIR}"
 

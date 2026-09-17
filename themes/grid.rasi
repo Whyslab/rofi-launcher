@@ -72,6 +72,7 @@ textbox {
    были за пределами окна — сетку приходилось листать вместо того, чтобы
    сравнивать взглядом, ради чего она и нужна. */
 listview {
+    flow: horizontal;
     columns: 4;
     lines: 3;
     fixed-height: false;

@@ -100,6 +100,7 @@ STRINGS = {
         "anim_speed_applied": "{category}: speed {speed}",
         "anim_no_preset": "No preset is active — pick one under Presets first",
         "anim_needs_window_dissolve": "(only with dissolve on window close)",
+        "anim_menus_fell_back": "menus no longer dissolve, they fade",
         "anim_menu_dissolve_needs_windows": (
             "Menus can only dissolve while windows close with a dissolve — "
             "pick a dissolve under Window close first"
@@ -169,6 +170,7 @@ STRINGS = {
         "anim_speed_applied": "{category}: скорость — {speed}",
         "anim_no_preset": "Набор не выбран — сначала выбери его в «Готовых наборах»",
         "anim_needs_window_dissolve": "(только при распаде окон)",
+        "anim_menus_fell_back": "меню больше не рассыпается, а тает",
         "anim_menu_dissolve_needs_windows": (
             "Меню рассыпаются только вместе с окнами — сначала выбери распад "
             "в «Закрытии окон»"

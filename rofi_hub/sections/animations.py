@@ -495,10 +495,15 @@ def set_variant(category, variant_id):
         notify(t("anim_menu_dissolve_needs_windows"))
         return None
     tuning["overrides"][category] = variant_id
-    return apply_tuning(tuning, t(
+    message = t(
         "anim_cat_applied",
         category=t(CATEGORY_TITLE[category]), name=_localized(variant.get("name")),
-    ))
+    )
+    menus = get_variant("layers", tuning["overrides"].get("layers", ""))
+    if category == "close" and menus and menus.get("layers_dissolve") \
+            and not (variant.get("dissolve") or {}).get("enabled"):
+        message += " · " + t("anim_menus_fell_back")
+    return apply_tuning(tuning, message)
 
 
 def set_speed(category, speed):
@@ -511,6 +516,40 @@ def set_speed(category, speed):
         "anim_speed_applied", category=t(CATEGORY_TITLE[category]),
         speed=t(f"anim_speed_{speed}").lower(),
     ))
+
+
+def live_spec(composed, saved):
+    """What to push with `hyprctl keyword` so the screen matches `composed`.
+
+    keyword can set a leaf but never unset one, and the running config is the
+    saved one. Any leaf the saved config sets but `composed` leaves to
+    inheritance would keep its saved value during the demo — previewing
+    "Speed: normal" would still play slow. So those leaves are set explicitly to
+    what they inherit: `global`, or Hyprland's built-in default."""
+    live = json.loads(json.dumps(composed))
+    inherit = live["animations"].get("global", HYPR_GLOBAL_DEFAULT)
+    for leaf in (saved.get("animations") or {}):
+        live["animations"].setdefault(leaf, inherit)
+    return live
+
+
+def wait_seconds(composed, category):
+    """How long the demo of one category has to wait for its animation to finish.
+
+    Hyprland's speed is in tenths of a second; an unset leaf inherits `global`."""
+    animations = composed.get("animations") or {}
+    fallback = _duration(animations.get("global", HYPR_GLOBAL_DEFAULT)) or 8
+    leaves = {
+        "open": ("windowsIn", "fadeIn"),
+        "close": ("windowsOut", "fadeOut"),
+        "workspaces": ("workspaces", "specialWorkspace"),
+        "layers": ("layersIn", "layersOut", "fadeLayersIn", "fadeLayersOut"),
+    }[category]
+    spans = [
+        (_duration(animations[leaf]) or 0) if leaf in animations else fallback
+        for leaf in leaves
+    ]
+    return round(max(spans) / 10 + 0.4, 1)
 
 
 def preview_tuning(category, variant_id=None, speed=None):
@@ -615,14 +654,15 @@ def root_rows():
     return result
 
 
-def _back():
+def _back(level):
     text, opts = back_row(t("back"), t("back_meta"))
+    opts["info"] = f"up:{level}"  # so a preview key on it stays on this screen
     return text, _with_icon(opts, PREVIEW_DIR / "_ui" / "back.png")
 
 
 def preset_rows():
     """The presets screen: a way back, then every preset."""
-    return [_back()] + rows()[1:]
+    return [_back("presets")] + rows()[1:]
 
 
 def category_rows(category):
@@ -630,7 +670,7 @@ def category_rows(category):
     tuning = load_tuning()
     overrides = tuning.get("overrides") or {}
     current_speed = (tuning.get("speed") or {}).get(category, "normal")
-    result = [_back()]
+    result = [_back(f"cat:{category}")]
 
     # Back plus three speeds is exactly the grid's first row of four.
     for speed in SPEED_ORDER:

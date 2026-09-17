@@ -30,7 +30,7 @@ Press the key, get a menu of five rows. Press a digit, get the section.
 | `2` | **Clipboard** | history; `Enter` copies, `Ctrl+X` deletes | `cliphist` |
 | `3` | **Emoji** | 556 symbols | own database |
 | `4` | **Wallpaper** | a grid of thumbnails | own script, separate window |
-| `5` | **Animations** | 11 presets with previews and a live demo | `hyprctl`, `hypr-dissolve` |
+| `5` | **Animations** | 11 presets, plus window open / close, workspaces and menus tuned separately, each with a speed; previews and a live demo | `hyprctl`, `hypr-dissolve` |
 
 The digits work **from inside any section**, not only from the menu: going from
 emoji to the clipboard is one keystroke. The cost is real: rofi binds a key for
@@ -112,8 +112,9 @@ installs into a throwaway directory.
 | `Ctrl+X` | delete a clipboard entry |
 | `Esc` | close |
 
-The animations grid has its own pair: `Enter` applies a preset for good,
-`Ctrl+Alt+Space` shows it live. Not `Ctrl+Space` — rofi already uses that for
+The animations grid has its own pair: `Enter` applies for good,
+`Ctrl+Alt+Space` shows the selected tile live — a whole preset, or just one
+category. Not `Ctrl+Space` — rofi already uses that for
 `kb-row-select`, and trying to rebind it makes rofi show an error dialog
 instead of the menu.
 
@@ -145,6 +146,27 @@ What ships with it:
 | | **Vertical** — everything moves up and down |
 | | **Cinematic** — slow and deliberate |
 | | **Instant** — everything off |
+
+#### Categories on top of a preset
+
+The window opens on five tiles: **Presets** and four categories — window open,
+window close, workspace switch, menus and notifications. A category is either
+left as in the preset or replaced by a variant from
+`data/animations/<category>/` (38 ship: dissolve variants such as mosaic, sand
+and sparks; quick; springy; slow), and each has a speed: fast, normal, slow.
+
+- What gets written is the preset with those parts swapped in; preset files never
+  change. Your choices live in `~/.config/rofi-launcher/animation-tuning.json`.
+- `Enter` on a variant or a speed applies it and keeps the window open, so you can
+  try one after another. `Enter` on a preset applies it and **resets** the tuning.
+- The dissolve rules are enforced, not left to taste: fade and geometry of a
+  closing surface always last the same (speeds included), and menus can only
+  dissolve while windows do — the plugin cannot dissolve menus alone. When
+  windows stop dissolving, menus fall back to a plain fade and the notification
+  says so. Only rofi menus dissolve; notifications fade.
+- The live demo of a category plays only that category, waits as long as the
+  animation really lasts, and resets anything the saved config sets that the
+  previewed one does not — so the demo is what `Enter` gives.
 
 **Both** Hyprland config formats are generated, classic and Lua. The moment a
 `hyprland.lua` exists the compositor stops reading `.conf` entirely — and a

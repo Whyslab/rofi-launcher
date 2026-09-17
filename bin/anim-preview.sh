@@ -45,25 +45,35 @@ cleanup() {
 }
 trap cleanup EXIT
 
-# 1. Применить временно. Python печатает две строки: что показывать и сколько
-#    секунд ждать, пока доиграет закрытие (из длительности самой анимации).
-#    Путь к пакету передаём аргументом: внутри heredoc нет __file__.
+# 1. Применить временно. Python печатает план: что показывать и сколько ждать
+#    каждое действие — длительности берутся из самой анимации, иначе медленные
+#    варианты обрывались на середине. Путь к пакету передаём аргументом: внутри
+#    heredoc нет __file__.
+reopen() {
+    # Вернуть настройки ДО того, как окно анимаций откроется снова: иначе оно
+    # проиграет своё появление ещё с показанными, а не с сохранёнными.
+    hyprctl reload >/dev/null 2>&1
+    setsid "$APP/bin/hub-animations.sh" >/dev/null 2>&1 &
+}
+
 PLAN="$(python3 - "$APP" "$@" <<'PY'
 import sys
 sys.path.insert(0, sys.argv[1])
 from rofi_hub.sections import animations as a
+from rofi_hub.strings import t
 
 args = sys.argv[2:]
+saved_preset = a.current_preset()
 if args[0] == "cat":
     _, category, kind, value = args[:4]
-    preset = a.current_preset()
-    if preset is None or category not in a.CATEGORY_LEAVES:
+    if saved_preset is None or category not in a.CATEGORY_LEAVES:
+        a.notify(t("anim_no_preset"))
         raise SystemExit(1)
     if kind == "var":
         tuning = a.preview_tuning(category, variant_id=value)
     else:
         tuning = a.preview_tuning(category, speed=value)
-    composed = a.compose(preset, tuning)
+    composed = a.compose(saved_preset, tuning)
     show = category
 else:
     preset = a.get(args[0])
@@ -72,19 +82,23 @@ else:
     composed = a.compose(preset, a.empty_tuning())
     show = "preset"
 
-a.apply_live(composed)
-
-def seconds(*leaves):
-    spans = [a._duration(composed["animations"].get(leaf)) or 0 for leaf in leaves]
-    return max(spans + [8]) / 10 + 0.4   # Hyprland's speed is in tenths of a second
+# The running config is the saved one; leaves it sets that the preview does not
+# must be reset, or the demo shows the old value (see live_spec).
+saved = a.compose(saved_preset, a.load_tuning()) if saved_preset else {"animations": {}}
+a.apply_live(a.live_spec(composed, saved))
 
 print(show)
-print(round(seconds("fadeOut", "windowsOut", "fadeLayersOut", "layersOut"), 1))
+for category in ("open", "close", "workspaces", "layers"):
+    print(a.wait_seconds(composed, category))
 PY
-)" || exit 0
+)" || { reopen; exit 0; }
 
-SHOW="$(printf '%s\n' "$PLAN" | sed -n 1p)"
-SETTLE="$(printf '%s\n' "$PLAN" | sed -n 2p)"
+line() { printf '%s\n' "$PLAN" | sed -n "${1}p"; }
+SHOW="$(line 1)"
+WAIT_OPEN="$(line 2)"
+WAIT_CLOSE="$(line 3)"
+WAIT_WORKSPACE="$(line 4)"
+WAIT_MENU="$(line 5)"
 
 open_window() {
     # Правило windowrule по классу делает окно плавающим и по центру — см. установку.
@@ -99,7 +113,7 @@ open_window() {
 
 close_window() {
     hyprctl dispatch closewindow "class:^(${CLASS})$" >/dev/null 2>&1
-    sleep "$SETTLE"
+    sleep "$WAIT_CLOSE"
 }
 
 switch_workspace() {
@@ -107,28 +121,30 @@ switch_workspace() {
     current="$(hyprctl activeworkspace -j 2>/dev/null | python3 -c 'import json,sys; print(json.load(sys.stdin).get("id",1))' 2>/dev/null || echo 1)"
     next=$(( current % 10 + 1 ))
     hyprctl dispatch workspace "$next" >/dev/null 2>&1
-    sleep 1.1
+    sleep "$WAIT_WORKSPACE"
     hyprctl dispatch workspace "$current" >/dev/null 2>&1
-    sleep 1.1
+    sleep "$WAIT_WORKSPACE"
 }
 
 show_menu() {
     printf 'Меню\nи уведомления\n' | rofi -dmenu -p "$(printf '')" >/dev/null 2>&1 &
     MENU_PID=$!
-    sleep 1.4
+    sleep "$WAIT_MENU"
+    sleep 0.6
     kill "$MENU_PID" >/dev/null 2>&1
     MENU_PID=""
-    sleep "$SETTLE"
+    sleep "$WAIT_MENU"
 }
 
 # 3. Показ.
 case "$SHOW" in
-    preset)     open_window; sleep 0.6; switch_workspace; close_window ;;
-    open)       open_window; sleep 1.2; close_window ;;
-    close)      open_window; sleep 0.9; close_window ;;
+    preset)     open_window; sleep "$WAIT_OPEN"; switch_workspace; close_window ;;
+    open)       open_window; sleep "$WAIT_OPEN"; sleep 0.6; close_window ;;
+    close)      open_window; sleep "$WAIT_OPEN"; close_window ;;
     workspaces) switch_workspace ;;
     layers)     show_menu ;;
 esac
 
-# 5. Откат делает trap. Открыть окно анимаций заново там же.
-setsid "$APP/bin/hub-animations.sh" >/dev/null 2>&1 &
+# 4–5. Вернуть настройки и открыть окно анимаций заново там же. trap тоже
+#      сделает reload — на случай, если до этой строки не дошли.
+reopen

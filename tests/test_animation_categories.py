@@ -437,3 +437,54 @@ def test_no_two_variants_of_a_category_look_the_same(category):
             x, y = thumbs[first], thumbs[second]
             difference = sum(abs(p - q) for p, q in zip(x, y, strict=True)) / len(x)
             assert difference >= 1.5, f"{category}: {first} and {second} look the same"
+
+
+# ─────────────────────────── preview fidelity (review 17.09) ───────────────────────────
+
+def test_live_spec_resets_leaves_only_the_saved_config_sets():
+    """keyword cannot unset a leaf: previewing "Speed: normal" while the saved
+    config has an explicit slow windowsIn must push the inherited value."""
+    preset = a.get("dissolve")
+    saved = a.compose(preset, tuning(speed={"open": "slow"}))
+    preview = a.compose(preset, tuning())
+    live = a.live_spec(preview, saved)
+    assert "windowsIn" not in preview["animations"]
+    assert live["animations"]["windowsIn"] == a.HYPR_GLOBAL_DEFAULT
+    assert live["animations"]["fadeOut"] == preview["animations"]["fadeOut"]
+
+
+def test_live_spec_uses_the_presets_own_global():
+    preset = a.get("instant")
+    saved = a.compose(preset, tuning({"open": "spring"}))
+    live = a.live_spec(a.compose(preset, tuning()), saved)
+    assert live["animations"]["windowsIn"] == "0"
+
+
+@pytest.mark.parametrize(("category", "expected"), [
+    ("close", 2.0 * 1.6 + 0.4),     # fog close, slow: 34 ds * 1.6 → 5.4 s + 0.4
+    ("workspaces", 0.8 + 0.4),      # fog preset workspaces: 8 ds
+])
+def test_wait_seconds_follows_the_animation(category, expected):
+    composed = a.compose(a.get("fog"), tuning(speed={"close": "slow"}))
+    if category == "close":
+        assert a.wait_seconds(composed, "close") == round(34 * 1.6 / 10 + 0.4, 1)
+    else:
+        assert a.wait_seconds(composed, category) == round(expected, 1)
+
+
+def test_wait_seconds_falls_back_to_global_for_unset_leaves():
+    composed = a.compose(a.get("dissolve"), tuning())
+    assert a.wait_seconds(composed, "open") == round(8 / 10 + 0.4, 1)
+
+
+def test_preview_key_on_the_back_tile_stays_on_the_screen(cfg, monkeypatch, capsys):
+    a._set_active("dissolve")
+    out = _run_mode(monkeypatch, capsys, anim_mode.RETV_PREVIEW, "up:cat:close")
+    assert "var:close:sand" in out
+
+
+def test_close_change_says_when_menus_stop_dissolving(cfg, quiet):
+    a._set_active("dissolve")
+    a.save_tuning(tuning({"layers": "dissolve"}))
+    a.set_variant("close", "shrink")
+    assert quiet["notified"][-1].endswith(a.t("anim_menus_fell_back"))

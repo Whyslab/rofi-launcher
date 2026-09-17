@@ -45,6 +45,7 @@ else
     echo "   ${CONFIG_HOME}/rofi-launcher/folders.conf"
     echo "   ${CONFIG_HOME}/rofi-launcher/favorites.list"
     echo "   ${CONFIG_HOME}/rofi-launcher/animation-preset"
+    echo "   ${CONFIG_HOME}/rofi-launcher/animation-tuning.json"
 fi
 
 echo

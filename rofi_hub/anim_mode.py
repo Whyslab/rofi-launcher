@@ -96,6 +96,8 @@ def start_preview(*args, level="root", select=""):
 
 def _level_of(info):
     """Which screen a row lives on, from its info."""
+    if info.startswith("up:"):
+        return info[3:]
     if info.startswith("anim:"):
         return "presets"
     if info.startswith(("var:", "speed:")):
@@ -109,7 +111,7 @@ def main():
     info = os.environ.get("ROFI_INFO", "")
 
     if retv == 1:
-        if info == "up":
+        if info == "up" or info.startswith("up:"):
             render("root")
             return
         if info.startswith("nav:"):

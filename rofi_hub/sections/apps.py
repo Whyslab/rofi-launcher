@@ -26,6 +26,12 @@ CFG_DIR = Path(os.environ.get("XDG_CONFIG_HOME") or HOME / ".config") / "rofi-la
 CACHE_DIR = Path(os.environ.get("XDG_CACHE_HOME") or HOME / ".cache") / "rofi-launcher"
 FOLDERS_FILE = CFG_DIR / "folders.conf"
 FAVORITES_FILE = CFG_DIR / "favorites.list"
+# Applications shown on the hub screen itself, after the sections, each
+# with its own digit. Same format as favorites.list; never rewritten by us.
+SHORTCUTS_FILE = CFG_DIR / "hub-shortcuts.list"
+# Section keys (apps, clipboard, emoji, wallpaper, animations) to leave off
+# the hub screen. Their own hotkeys (Ctrl+J, Super+Shift+W) keep working.
+HIDDEN_FILE = CFG_DIR / "hub-hidden.list"
 USAGE_FILE = CACHE_DIR / "usage.json"
 
 TERMINAL = os.environ.get("ROFI_LAUNCHER_TERMINAL", "kitty")
@@ -189,15 +195,27 @@ def scan_apps():
 
 # ─────────────────────────── state ───────────────────────────
 
-def read_favorites():
-    if not FAVORITES_FILE.exists():
+def _read_id_list(path):
+    if not path.exists():
         return []
     out = []
-    for line in FAVORITES_FILE.read_text(encoding="utf-8").splitlines():
+    for line in path.read_text(encoding="utf-8").splitlines():
         line = line.strip()
         if line and not line.startswith("#"):
             out.append(line)
     return out
+
+
+def read_favorites():
+    return _read_id_list(FAVORITES_FILE)
+
+
+def read_shortcuts():
+    return _read_id_list(SHORTCUTS_FILE)
+
+
+def read_hidden_sections():
+    return set(_read_id_list(HIDDEN_FILE))
 
 
 def write_favorites(ids):
@@ -485,9 +503,12 @@ def hotkey_move(desktop_id, favorites, delta):
 
 
 __all__ = [
-    "CACHE_DIR", "CFG_DIR", "FAVORITES_FILE", "FOLDERS_FILE", "USAGE_FILE",
+    "CACHE_DIR", "CFG_DIR", "FAVORITES_FILE", "FOLDERS_FILE", "HIDDEN_FILE",
+    "SHORTCUTS_FILE",
+    "USAGE_FILE",
     "all_rows", "app_row", "build_folder", "folder_rows", "hotkey_move",
     "hotkey_pin", "hotkey_unpin", "launch", "layout_variants", "load_folders",
-    "pinned_rows", "read_favorites", "read_usage", "resolve_folder",
+    "pinned_rows", "read_favorites", "read_hidden_sections", "read_shortcuts",
+    "read_usage", "resolve_folder",
     "scan_apps", "write_favorites",
 ]

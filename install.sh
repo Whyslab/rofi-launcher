@@ -176,7 +176,8 @@ echo "    bind = SUPER, R, exec, \$menu"
 echo "    bind = CTRL, J, exec, ${APP_DIR}/bin/hub-clipboard.sh"
 echo "    bind = SUPER SHIFT, W, exec, ${APP_DIR}/bin/hub-wallpaper.sh"
 echo
-echo "  Inside the hub: 1..5 open a section, Tab switches the applications"
+echo "  Inside the hub: 1..5 open a section, 6..9 launch the shortcuts from"
+echo "  hub-shortcuts.list (optional), Tab switches the applications"
 echo "  section between pinned entries and every application."
 echo
 echo "  The live animation preview needs a floating test window:"

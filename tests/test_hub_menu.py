@@ -72,3 +72,107 @@ def test_grid_sections_are_the_ones_with_no_level():
     to draw them itself."""
     windowed = {key for key, _, _, level in hub.SECTIONS if level is None}
     assert windowed == {"wallpaper", "animations"}
+
+
+# ─── shortcuts: applications with a digit of their own on the hub screen ───
+
+def _app(name):
+    return {"name": name, "meta": name.lower(), "icon": "", "terminal": False,
+            "exec": name.lower(), "path": f"/x/{name}.desktop", "workdir": ""}
+
+
+@pytest.fixture
+def shortcut_file(tmp_path, monkeypatch):
+    path = tmp_path / "hub-shortcuts.list"
+    monkeypatch.setattr(hub.apps, "SHORTCUTS_FILE", path)
+    return path
+
+
+def test_no_shortcut_file_leaves_the_hub_as_it_was(shortcut_file):
+    app_index = {"timer.desktop": _app("Timer")}
+    assert len(hub.build_hub(app_index)) == len(hub.SECTIONS)
+
+
+def test_shortcuts_follow_the_sections_with_the_next_digits(shortcut_file):
+    shortcut_file.write_text("# comment\ntimer.desktop\nnetspeed.desktop\n")
+    app_index = {"timer.desktop": _app("Timer"), "netspeed.desktop": _app("Speed")}
+    rows = hub.build_hub(app_index)
+    extra = rows[len(hub.SECTIONS):]
+    assert [text for text, _ in extra] == ["hub:app:timer.desktop", "hub:app:netspeed.desktop"]
+    for number, (_, opts) in enumerate(extra, start=len(hub.SECTIONS) + 1):
+        assert f">{number}<" in opts["display"]
+        assert opts["info"].startswith("app:")
+    first = len(hub.SECTIONS)
+    assert hub._digit_target(first, app_index) == ("app", "timer.desktop")
+    assert hub._digit_target(first + 1, app_index) == ("app", "netspeed.desktop")
+    assert hub._digit_target(first + 2, app_index) is None
+
+
+def test_a_missing_application_is_skipped_and_the_digits_close_up(shortcut_file):
+    """Otherwise a row would advertise a key that launches nothing."""
+    shortcut_file.write_text("gone.desktop\ntimer.desktop\ntimer.desktop\n")
+    app_index = {"timer.desktop": _app("Timer")}
+    assert hub.shortcuts(app_index) == ["timer.desktop"]
+    assert hub._digit_target(len(hub.SECTIONS), app_index) == ("app", "timer.desktop")
+
+
+def test_no_more_shortcuts_than_there_are_digits(shortcut_file):
+    ids = [f"a{i}.desktop" for i in range(10)]
+    shortcut_file.write_text("\n".join(ids))
+    app_index = {i: _app(i) for i in ids}
+    assert len(hub.shortcuts(app_index)) == hub.MAX_SHORTCUTS
+    assert len(hub.SECTIONS) + hub.MAX_SHORTCUTS <= 9
+
+
+def test_every_shortcut_digit_is_bound():
+    bound = set(re.findall(r'-kb-custom-\d+\s+"(\d)"', HUB_SH))
+    needed = {str(n) for n in range(1, len(hub.SECTIONS) + hub.MAX_SHORTCUTS + 1)}
+    assert needed <= bound, f"unbound digits: {sorted(needed - bound)}"
+
+
+def test_a_shortcut_digit_launches_and_closes_the_hub(shortcut_file, monkeypatch):
+    shortcut_file.write_text("timer.desktop\n")
+    app_index = {"timer.desktop": _app("Timer")}
+    launched = []
+    monkeypatch.setattr(hub.apps, "launch", lambda app, i: launched.append(i))
+    retv = hub.RETV_DIGIT + len(hub.SECTIONS)
+    closed = hub._handle_hotkey(retv, "", "", state.APPS, "", app_index, [], [])
+    assert closed is True and launched == ["timer.desktop"]
+
+
+def test_enter_on_a_shortcut_row_launches_it(shortcut_file, monkeypatch):
+    shortcut_file.write_text("timer.desktop\n")
+    app_index = {"timer.desktop": _app("Timer")}
+    launched = []
+    monkeypatch.setattr(hub.apps, "launch", lambda app, i: launched.append(i))
+    closed = hub._handle_selection("app:timer.desktop", "hub:app:timer.desktop",
+                                   state.ROOT, "", app_index, [], [])
+    assert closed is True and launched == ["timer.desktop"]
+
+
+# ─── hidden sections ───
+
+@pytest.fixture
+def hidden_file(tmp_path, monkeypatch):
+    path = tmp_path / "hidden.list"
+    monkeypatch.setattr(hub.apps, "HIDDEN_FILE", path)
+    return path
+
+
+def test_hidden_sections_leave_the_screen_and_the_digits_close_up(hidden_file, shortcut_file):
+    hidden_file.write_text("clipboard\nwallpaper\n")
+    shortcut_file.write_text("timer.desktop\n")
+    app_index = {"timer.desktop": _app("Timer")}
+    texts = [text for text, _ in hub.build_hub(app_index)]
+    assert texts == ["hub:apps", "hub:emoji", "hub:animations", "hub:app:timer.desktop"]
+    assert hub._digit_target(1, app_index)[0] == "emoji"
+    assert hub._digit_target(2, app_index)[0] == "animations"
+    assert hub._digit_target(3, app_index) == ("app", "timer.desktop")
+    assert hub._digit_target(4, app_index) is None
+    for number, (_, opts) in enumerate(hub.build_hub(app_index), start=1):
+        assert f">{number}<" in opts["display"]
+
+
+def test_an_unknown_hidden_key_changes_nothing(hidden_file):
+    hidden_file.write_text("no-such-section\n")
+    assert len(hub.build_hub()) == len(hub.SECTIONS)

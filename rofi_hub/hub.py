@@ -15,6 +15,10 @@ the opposite of what a hub is for. Applications are now a section like any
 other, reached with 1.
 
 Digits 1..5 jump straight to a section, from anywhere, not just from the root.
+After the sections come up to four application shortcuts (hub-shortcuts.list,
+digits 6..9): things used often enough to deserve a key of their own, such as a
+timer. A shortcut launches the application and closes the hub. Sections listed
+in hub-hidden.list are left off the screen and the digits close up.
 The cost is real and worth stating: rofi binds a key for the whole session, so
 a digit can no longer be typed into the filter box. In exchange, switching
 between sections is one keystroke rather than Escape-and-back.
@@ -57,7 +61,10 @@ RETV_DOWN = 13       # Ctrl+Alt+Down
 RETV_BACK = 14       # Alt+Left
 RETV_DELETE = 15     # Ctrl+X
 RETV_TAB = 16        # Tab
-RETV_DIGIT = 17      # 1 .. 5 occupy 17..21
+RETV_DIGIT = 17      # 1 .. 9 occupy 17..25
+
+# Digits 6..9: one per shortcut. Bound in bin/hub.sh whether used or not.
+MAX_SHORTCUTS = 4
 
 # The order here is the order on the hub screen and the digit that opens each
 # one. Adding a section means adding a line here and a binding in bin/hub.sh.
@@ -73,16 +80,40 @@ SECTIONS = (
 )
 
 
-def _digit_target(index):
-    """Which section digit `index` (0-based) opens, or None."""
-    if 0 <= index < len(SECTIONS):
-        return SECTIONS[index]
+def visible_sections():
+    """SECTIONS minus the ones hub-hidden.list leaves off, in the same order."""
+    hidden = apps.read_hidden_sections()
+    return [s for s in SECTIONS if s[0] not in hidden]
+
+
+def shortcuts(app_index):
+    """The shortcut desktop ids that are actually installed, in file order.
+
+    A missing application is skipped rather than shown dead, and the digits of
+    the rest close up — so a row never advertises a key that launches nothing.
+    """
+    if not app_index:
+        return []
+    listed = [i for i in apps.read_shortcuts() if i in app_index]
+    return list(dict.fromkeys(listed))[:MAX_SHORTCUTS]
+
+
+def _digit_target(index, app_index=None):
+    """What digit `index` (0-based) opens: a SECTIONS entry, ("app", desktop_id),
+    or None."""
+    sections = visible_sections()
+    if 0 <= index < len(sections):
+        return sections[index]
+    extra = shortcuts(app_index)
+    if 0 <= index - len(sections) < len(extra):
+        return ("app", extra[index - len(sections)])
     return None
 
 
-def build_hub():
+def build_hub(app_index=None):
     rows = []
-    for number, (key, label_key, meta_key, level) in enumerate(SECTIONS, start=1):
+    sections = visible_sections()
+    for number, (key, label_key, meta_key, level) in enumerate(sections, start=1):
         info = f"go:{level}" if level is not None else f"run:{key}"
         rows.append((f"hub:{key}", {
             # The number is part of the label, not decoration: it is the key
@@ -90,6 +121,17 @@ def build_hub():
             "display": f"{dim(str(number))}   {html.escape(t(label_key))}   {dim(ARROW)}",
             "meta": f"{t(meta_key)} {number}",
             "info": info,
+        }))
+    for number, desktop_id in enumerate(shortcuts(app_index), start=len(sections) + 1):
+        app = app_index[desktop_id]
+        # info "app:" is the same one the applications section uses, so Enter
+        # goes through the ordinary launch path.
+        rows.append((f"hub:app:{desktop_id}", {
+            "display": f"{dim(str(number))}   {html.escape(app['name'])}",
+            "meta": f"{app['meta']} {number}",
+            # No icon: the sections have none, and an icon on two rows only
+            # pushes their digits out of the column.
+            "info": f"app:{desktop_id}",
         }))
     return rows
 
@@ -146,7 +188,7 @@ def render(level, argument, app_index, folders, favorites, select_text=None, mes
     if level == state.ROOT:
         if GLYPH_SEARCH:
             emit_directive("prompt", GLYPH_SEARCH)
-        rows = build_hub()
+        rows = build_hub(app_index)
         hint = t("hint_hub")
     else:
         title, hint = _title_and_hint(level, argument)
@@ -248,11 +290,14 @@ def _key_for_level(level):
 
 def _handle_hotkey(retv, info, argv_text, level, argument, app_index, folders, favorites):
     """Returns True when the hub should close."""
-    if RETV_DIGIT <= retv < RETV_DIGIT + len(SECTIONS):
-        section = _digit_target(retv - RETV_DIGIT)
+    if RETV_DIGIT <= retv < RETV_DIGIT + len(SECTIONS) + MAX_SHORTCUTS:
+        section = _digit_target(retv - RETV_DIGIT, app_index)
         if section is None:
             render(level, argument, app_index, folders, favorites)
             return False
+        if section[0] == "app":
+            apps.launch(app_index[section[1]], section[1])
+            return True
         key, _, _, section_level = section
         if section_level is None:
             _open_grid_section(key)

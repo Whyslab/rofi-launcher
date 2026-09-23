@@ -212,6 +212,27 @@ display order. It is rewritten whenever you press `Ctrl+P` or reorder, so
 comments below the header are not preserved — the file is meant to be driven
 from the launcher rather than edited.
 
+### Shortcuts on the hub screen
+
+`~/.config/rofi-launcher/hub-shortcuts.list` puts up to four applications on
+the hub screen itself, after the sections, with digits 6–9 — for things you
+open often enough to want one key, such as a timer. Same format as
+`favorites.list` (one `.desktop` id per line), but edited by hand and never
+rewritten. An application that is not installed is skipped and the digits of
+the rest close up. No file, no shortcuts.
+
+```
+timer.desktop
+netspeed.desktop
+```
+
+### Hiding sections
+
+`~/.config/rofi-launcher/hub-hidden.list` takes section keys — `apps`,
+`clipboard`, `emoji`, `wallpaper`, `animations` — one per line, and leaves those
+off the hub screen; the digits of the rest close up. The dedicated hotkeys
+(`Ctrl+J`, `Super+Shift+W`) keep opening their sections either way.
+
 ### Wrong-layout search
 
 Two layouts are stored as strings of the same keys in the same order, so a
